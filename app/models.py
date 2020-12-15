@@ -25,7 +25,8 @@ class SUPER_USER:
                 os.makedirs(self.email)
 
 
-class User(db.Model, '''UserMixin''', SUPER_USER):
+class User(db.Model,  SUPER_USER):
+    '''UserMixin'''
     __tablename__ = 'users'
     cc_number = db.Column(db.String)
     cc_exp = db.Column(db.DateTime)  # the day of expiration is always the last day of the month
@@ -34,7 +35,8 @@ class User(db.Model, '''UserMixin''', SUPER_USER):
         return 'User %r %r (%r)' % self.name, self.surname, self.email
 
 
-class Owner(db.Model, '''UserMixin''', SUPER_USER):
+class Owner(db.Model, SUPER_USER):
+    '''UserMixin'''
     __tablename__ = 'owners'
 
     def __repr__(self):

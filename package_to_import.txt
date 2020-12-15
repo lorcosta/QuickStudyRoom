@@ -1,2 +1,5 @@
 Flask-SQLAlchemy
+SQLAlchemy
+Flask
 datetime
+python-dotenv
