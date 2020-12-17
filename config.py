@@ -6,7 +6,7 @@ basedir = path.abspath(path.dirname(__file__))
 
 
 class Config(object):
-    FLASKY_ADMIN = getenv('FLASKY_ADMIN')  # ?? what is it
+    FLASKY_ADMIN = getenv('FLASKY_ADMIN')
     SECRET_KEY = getenv('SECRET_KEY')
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=20)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -25,6 +25,11 @@ class DevConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + path.join(basedir, 'DEV.db')
 
 
+class TestConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + path.join(basedir, 'TEST.db')
+
+
 class ProdConfig(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = getenv('SQLALCHEMY_DATABASE_URI')
@@ -32,6 +37,7 @@ class ProdConfig(Config):
 
 config = {
     'development': DevConfig,
+    'testing': TestConfig,
     'production': ProdConfig
 }
 

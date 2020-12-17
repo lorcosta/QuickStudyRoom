@@ -47,12 +47,12 @@ class StudyRoom(db.Model):
     __tablename__ = 'studyRooms'
     id = db.Column(db.Integer, primary_key=True)
     owner_id_email = db.Column(db.String, db.ForeignKey('owners.email'))
-    name = db.Column(db.String(50), unique=True, nullable=False)  # remember to show a message to let understand that the name will be made of 'name - place'
+    name = db.Column(db.String(50), unique=True, nullable=False)
     phone_num = db.Column(db.String(20))
     address = db.Column(db.String, nullable=False)  # full address, street, city, country, zip code
     bookable = db.Column(db.Boolean, nullable=False, default=True)  # fast check if a studyRoom is bookable, default??
     # what default value is correct for bookable? We need to check continuously the number of seats
-    services = db.Column(db.String)
+    services = db.Column()
     seats_booked = db.Column(db.Integer, nullable=False, default=0)
     seats_max = db.Column(db.Integer, nullable=False)
 
@@ -65,8 +65,7 @@ class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True, index=True)
     user_email = db.Column(db.String, db.ForeignKey('users.email'), index=True, nullable=False)
     study_room = db.Column(db.Integer, db.ForeignKey('studyRooms.id'), index=True, nullable=False)
-    start_datetime = db.Column(db.DateTime, default=datetime(year=2000, month=12, day=30), index=True, nullable=False)
-    # TODO correct default to the date and time given by the user
+    start_datetime = db.Column(db.DateTime, default=datetime.now(), index=True, nullable=False)
     duration = timedelta(hours=1)
     end_datetime = db.Column(db.DateTime, default=datetime.now()+duration, index=True, nullable=False)
 
