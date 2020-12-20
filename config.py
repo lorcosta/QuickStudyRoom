@@ -25,11 +25,6 @@ class DevConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + path.join(basedir, 'DEV.db')
 
 
-class TestConfig(Config):
-    TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + path.join(basedir, 'TEST.db')
-
-
 class ProdConfig(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = getenv('SQLALCHEMY_DATABASE_URI')
@@ -37,12 +32,9 @@ class ProdConfig(Config):
 
 config = {
     'development': DevConfig,
-    'testing': TestConfig,
     'production': ProdConfig
 }
 
 
-def set_config(select=False):
-    # if select:
-        # return config[set_env(config_menu())]
+def set_config():
     return config[set_env(sel_key='d')]

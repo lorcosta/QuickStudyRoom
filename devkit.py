@@ -4,7 +4,6 @@ def set_env(sel_key):
 
 	envs = {
 		'd': 'development',
-		't': 'testing',
 		'p': 'production',
 	}
 
@@ -15,7 +14,10 @@ def set_env(sel_key):
 		with open(path.join(basedir, '.env'), 'a') as f:
 			f.write('\nFLASK_ENV={envs[sel_key]}')
 			return envs[sel_key]
-	elif e != envs[sel_key]:
+	else:
+		return e
+	# overwrite the variable in dotenv file
+	'''elif e != envs[sel_key]:
 		with open(path.join(basedir, '.env'), 'r') as f:
 			lines = f.readlines()
 		with open(path.join(basedir, '.env'), 'w') as f:
@@ -24,4 +26,4 @@ def set_env(sel_key):
 					f.write('FLASK_ENV={envs[sel_key]}')
 				else:
 					f.write(line)
-	return envs[sel_key]
+	return envs[sel_key]'''

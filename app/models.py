@@ -25,22 +25,29 @@ class SUPER_USER:
                 os.makedirs(self.email)
 
 
+class Reservation(db.Model):
+    __tablename__ = 'reservations'
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    user_email = db.Column(db.String, db.ForeignKey('users.email'), index=True, nullable=False)
+    study_room = db.Column(db.Integer, db.ForeignKey('studyRooms.id'), index=True, nullable=False)
+    start_datetime = db.Column(db.DateTime, default=datetime.now(), index=True, nullable=False)
+    # TODO change the datetime, it should be time of the reservation not now!!
+    duration = timedelta(hours=1)
+    end_datetime = db.Column(db.DateTime, default=datetime.now()+duration, index=True, nullable=False)
+
+    def __repr__(self):
+        return 'Reservation num. %r, user %r' % self.id, self.user
+
+
 class User(db.Model,  SUPER_USER):
     '''UserMixin'''
     __tablename__ = 'users'
     cc_number = db.Column(db.String)
     cc_exp = db.Column(db.DateTime)  # the day of expiration is always the last day of the month
+    reservations = db.relationship(Reservation, backref='user')
 
     def __repr__(self):
         return 'User %r %r (%r)' % self.name, self.surname, self.email
-
-
-class Owner(db.Model, SUPER_USER):
-    '''UserMixin'''
-    __tablename__ = 'owners'
-
-    def __repr__(self):
-        return 'Owner %r %r (%r)' % self.name, self.surname, self.email
 
 
 class StudyRoom(db.Model):
@@ -52,22 +59,19 @@ class StudyRoom(db.Model):
     address = db.Column(db.String, nullable=False)  # full address, street, city, country, zip code
     bookable = db.Column(db.Boolean, nullable=False, default=True)  # fast check if a studyRoom is bookable, default??
     # what default value is correct for bookable? We need to check continuously the number of seats
-    services = db.Column()
+    services = db.Column(db.String)
     seats_booked = db.Column(db.Integer, nullable=False, default=0)
     seats_max = db.Column(db.Integer, nullable=False)
+    reservations = db.relationship(Reservation, backref='study_room_obj')
 
     def __repr__(self):
         return 'Study Room num. %r, %r. Owner contact: %r' % self.id, self.name, self.owner_id_email
 
 
-class Reservation(db.Model):
-    __tablename__ = 'reservations'
-    id = db.Column(db.Integer, primary_key=True, index=True)
-    user_email = db.Column(db.String, db.ForeignKey('users.email'), index=True, nullable=False)
-    study_room = db.Column(db.Integer, db.ForeignKey('studyRooms.id'), index=True, nullable=False)
-    start_datetime = db.Column(db.DateTime, default=datetime.now(), index=True, nullable=False)
-    duration = timedelta(hours=1)
-    end_datetime = db.Column(db.DateTime, default=datetime.now()+duration, index=True, nullable=False)
+class Owner(db.Model, SUPER_USER):
+    '''UserMixin'''
+    __tablename__ = 'owners'
+    reservations = db.relationship(StudyRoom, backref='owner')
 
     def __repr__(self):
-        return 'Reservation num. %r, user %r' % self.id, self.user
+        return 'Owner %r %r (%r)' % self.name, self.surname, self.email
