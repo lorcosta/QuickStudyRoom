@@ -1,5 +1,6 @@
 import click
 from flask.cli import with_appcontext
+from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, current_app
@@ -8,6 +9,9 @@ from config import set_config
 
 db = SQLAlchemy()
 migration = Migrate()
+login_manager = LoginManager()
+login_manager.session_protection = 'strong'
+login_manager.login_view = 'auth.login'
 
 
 @click.command(name='create_db', help='In theory it build the database')
@@ -29,9 +33,13 @@ def create_app(config=None):
         # TODO tests
         # TODO migration
         migration.init_app(app, db)
+        login_manager.init_app(app)
         # TODO register blueprint
         from app.main import main
         app.register_blueprint(main)
+
+        from app.auth import auth
+        auth.register_blueprint(auth)
         # TODO add command to do things on the database
         app.cli.add_command(db_creation)
     return app

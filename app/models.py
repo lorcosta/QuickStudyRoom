@@ -1,5 +1,8 @@
 import os
 from datetime import datetime, timedelta
+
+from flask_login import UserMixin
+
 from app import db
 
 
@@ -29,8 +32,8 @@ class Reservation(db.Model):
     __tablename__ = 'reservations'
     id = db.Column(db.Integer, primary_key=True, index=True)
     user_email = db.Column(db.String, db.ForeignKey('users.email'), index=True, nullable=False)
-    study_room = db.Column(db.Integer, db.ForeignKey('studyRooms.id'), index=True, nullable=False)
-    start_datetime = db.Column(db.DateTime, default=datetime.now(), index=True, nullable=False)
+    study_room_id = db.Column(db.Integer, db.ForeignKey('studyRooms.id'), index=True, nullable=False)
+    start_datetime = db.Column(db.DateTime, index=True, nullable=False)
     # TODO change the datetime, it should be time of the reservation not now!!
     duration = timedelta(hours=1)
     end_datetime = db.Column(db.DateTime, default=datetime.now()+duration, index=True, nullable=False)
@@ -39,12 +42,11 @@ class Reservation(db.Model):
         return 'Reservation num. %r, user %r' % self.id, self.user
 
 
-class User(db.Model,  SUPER_USER):
-    '''UserMixin'''
+class User(db.Model, UserMixin, SUPER_USER):
     __tablename__ = 'users'
     cc_number = db.Column(db.String)
     cc_exp = db.Column(db.DateTime)  # the day of expiration is always the last day of the month
-    reservations = db.relationship(Reservation, backref='user')
+    reservations = db.relationship('Reservation', foreign_keys=[Reservation.user_email], backref=db.backref('user'))
 
     def __repr__(self):
         return 'User %r %r (%r)' % self.name, self.surname, self.email
@@ -62,16 +64,15 @@ class StudyRoom(db.Model):
     services = db.Column(db.String)
     seats_booked = db.Column(db.Integer, nullable=False, default=0)
     seats_max = db.Column(db.Integer, nullable=False)
-    reservations = db.relationship(Reservation, backref='study_room_obj')
+    reservations = db.relationship('Reservation', foreign_keys=[Reservation.study_room_id], backref=db.backref('study_room_obj'))
 
     def __repr__(self):
         return 'Study Room num. %r, %r. Owner contact: %r' % self.id, self.name, self.owner_id_email
 
 
-class Owner(db.Model, SUPER_USER):
-    '''UserMixin'''
+class Owner(db.Model, UserMixin, SUPER_USER):
     __tablename__ = 'owners'
-    reservations = db.relationship(StudyRoom, backref='owner')
+    reservations = db.relationship('StudyRoom', foreign_keys=[StudyRoom.owner_id_email], backref='owner')
 
     def __repr__(self):
         return 'Owner %r %r (%r)' % self.name, self.surname, self.email

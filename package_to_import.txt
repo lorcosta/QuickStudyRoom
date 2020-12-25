@@ -4,3 +4,5 @@ Flask
 datetime
 python-dotenv
 flask-migrate
+flask-login
+flask-wtf
