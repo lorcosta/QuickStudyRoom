@@ -23,6 +23,7 @@ class DevConfig(Config):
     DEBUG = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + path.join(basedir, 'DEV.db')
+    SQLALCHEMY_BINDS = getenv('SQLALCHEMY_BINDS')
 
 
 class ProdConfig(Config):

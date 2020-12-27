@@ -7,13 +7,13 @@ from app import db
 
 
 class SUPER_USER:
-    username = db.Column(db.String(10), nullable=False, index=True, unique=True)
-    email = db.Column(db.String, primary_key=True)
+    username = db.Column(db.String(10), nullable=True, index=True, unique=True)
+    email = db.Column(db.String, primary_key=True, index=True, unique=True)
     # confirmed = db.Column(db.Boolean, nullable=False, default=False)
     name = db.Column(db.String(64), nullable=False)
     surname = db.Column(db.String(64), nullable=False)
     # file_path = db.Column(db.String(20), unique=True)  # path to the directory where the files of the users are saved
-    dob = db.Column(db.DateTime, nullable=False)
+    dob = db.Column(db.DateTime, nullable=True)
     city = db.Column(db.String)  # city and country
     password = db.Column(db.String(60), unique=False, nullable=False)
 
@@ -56,6 +56,7 @@ class StudyRoom(db.Model):
     __tablename__ = 'studyRooms'
     id = db.Column(db.Integer, primary_key=True)
     owner_id_email = db.Column(db.String, db.ForeignKey('owners.email'))
+    mail_contact = db.Column(db.String, nullable=True, default='owners.email')  # default is correct?
     name = db.Column(db.String(50), unique=True, nullable=False)
     phone_num = db.Column(db.String(20))
     address = db.Column(db.String, nullable=False)  # full address, street, city, country, zip code
@@ -65,6 +66,7 @@ class StudyRoom(db.Model):
     seats_booked = db.Column(db.Integer, nullable=False, default=0)
     seats_max = db.Column(db.Integer, nullable=False)
     reservations = db.relationship('Reservation', foreign_keys=[Reservation.study_room_id], backref=db.backref('study_room_obj'))
+    # bagno, macchinette per cibo, macchinette per caffè, internet, prese elettriche, fotocopiatrice,
 
     def __repr__(self):
         return 'Study Room num. %r, %r. Owner contact: %r' % self.id, self.name, self.owner_id_email
