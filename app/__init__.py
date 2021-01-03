@@ -32,14 +32,15 @@ def create_app(config=None):
     with app.app_context():
         # TODO tests
         # TODO migration
-        migration.init_app(app, db)
+        #migration.init_app(app, db)
         login_manager.init_app(app)
+
         # TODO register blueprint
         from app.main import main
         app.register_blueprint(main)
 
-        from app.auth import auth
-        auth.register_blueprint(auth)
+        #from app.auth import auth
+        #auth.register_blueprint(auth)
         # TODO add command to do things on the database
         app.cli.add_command(db_creation)
     return app

@@ -3,10 +3,15 @@ from datetime import datetime, timedelta
 
 from flask_login import UserMixin
 
-from app import db
+from app import db, login_manager
 
 
-class SUPER_USER:
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
+
+class SuperUser:
     username = db.Column(db.String(10), nullable=True, index=True, unique=True)
     email = db.Column(db.String, primary_key=True, index=True, unique=True)
     # confirmed = db.Column(db.Boolean, nullable=False, default=False)
@@ -23,7 +28,7 @@ class SUPER_USER:
 
     def set_file_path(self):
         if not self.email:
-            os.chdir(os.getcwd()+'/app/static')
+            os.chdir(os.getcwd() + '/app/static')
             if not os.path.exists(self.email):
                 os.makedirs(self.email)
 
@@ -36,13 +41,13 @@ class Reservation(db.Model):
     start_datetime = db.Column(db.DateTime, index=True, nullable=False)
     # TODO change the datetime, it should be time of the reservation not now!!
     duration = timedelta(hours=1)
-    end_datetime = db.Column(db.DateTime, default=datetime.now()+duration, index=True, nullable=False)
+    end_datetime = db.Column(db.DateTime, default=datetime.now() + duration, index=True, nullable=False)
 
     def __repr__(self):
         return 'Reservation num. %r, user %r' % self.id, self.user
 
 
-class User(db.Model, UserMixin, SUPER_USER):
+class User(db.Model, UserMixin, SuperUser):
     __tablename__ = 'users'
     cc_number = db.Column(db.String)
     cc_exp = db.Column(db.DateTime)  # the day of expiration is always the last day of the month
@@ -65,14 +70,16 @@ class StudyRoom(db.Model):
     services = db.Column(db.String)
     seats_booked = db.Column(db.Integer, nullable=False, default=0)
     seats_max = db.Column(db.Integer, nullable=False)
-    reservations = db.relationship('Reservation', foreign_keys=[Reservation.study_room_id], backref=db.backref('study_room_obj'))
-    # bagno, macchinette per cibo, macchinette per caffè, internet, prese elettriche, fotocopiatrice,
+    reservations = db.relationship('Reservation', foreign_keys=[Reservation.study_room_id],
+                                   backref=db.backref('study_room_obj'))
+
+    # bagno, macchinette per cibo, macchinette per caffe', internet, prese elettriche, fotocopiatrice,
 
     def __repr__(self):
         return 'Study Room num. %r, %r. Owner contact: %r' % self.id, self.name, self.owner_id_email
 
 
-class Owner(db.Model, UserMixin, SUPER_USER):
+class Owner(db.Model, UserMixin, SuperUser):
     __tablename__ = 'owners'
     reservations = db.relationship('StudyRoom', foreign_keys=[StudyRoom.owner_id_email], backref='owner')
 
