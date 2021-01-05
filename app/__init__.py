@@ -1,5 +1,7 @@
 import click
+import os
 from flask.cli import with_appcontext
+from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -10,6 +12,7 @@ from config import set_config
 db = SQLAlchemy()
 migration = Migrate()
 login_manager = LoginManager()
+pswManager = Bcrypt()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 
@@ -34,13 +37,13 @@ def create_app(config=None):
         # TODO migration
         #migration.init_app(app, db)
         login_manager.init_app(app)
-
+        pswManager.init_app(app)
         # TODO register blueprint
         from app.main import main
         app.register_blueprint(main)
 
-        #from app.auth import auth
-        #auth.register_blueprint(auth)
+        from app.auth import auth
+        app.register_blueprint(auth)
         # TODO add command to do things on the database
         app.cli.add_command(db_creation)
     return app

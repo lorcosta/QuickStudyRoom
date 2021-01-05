@@ -12,7 +12,6 @@ def load_user(user_id):
 
 
 class SuperUser:
-    username = db.Column(db.String(10), nullable=True, index=True, unique=True)
     email = db.Column(db.String, primary_key=True, index=True, unique=True)
     # confirmed = db.Column(db.Boolean, nullable=False, default=False)
     name = db.Column(db.String(64), nullable=False)
@@ -51,7 +50,7 @@ class User(db.Model, UserMixin, SuperUser):
     __tablename__ = 'users'
     cc_number = db.Column(db.String)
     cc_exp = db.Column(db.DateTime)  # the day of expiration is always the last day of the month
-    reservations = db.relationship('Reservation', foreign_keys=[Reservation.user_email], backref=db.backref('user'))
+    reservations = db.relationship('Reservation', '''foreign_keys=[Reservation.user_email]''', backref=db.backref('user'))
 
     def __repr__(self):
         return 'User %r %r (%r)' % self.name, self.surname, self.email
@@ -70,7 +69,7 @@ class StudyRoom(db.Model):
     services = db.Column(db.String)
     seats_booked = db.Column(db.Integer, nullable=False, default=0)
     seats_max = db.Column(db.Integer, nullable=False)
-    reservations = db.relationship('Reservation', foreign_keys=[Reservation.study_room_id],
+    reservations = db.relationship('Reservation', '''foreign_keys=[Reservation.study_room_id]''',
                                    backref=db.backref('study_room_obj'))
 
     # bagno, macchinette per cibo, macchinette per caffe', internet, prese elettriche, fotocopiatrice,
@@ -81,7 +80,7 @@ class StudyRoom(db.Model):
 
 class Owner(db.Model, UserMixin, SuperUser):
     __tablename__ = 'owners'
-    reservations = db.relationship('StudyRoom', foreign_keys=[StudyRoom.owner_id_email], backref='owner')
+    reservations = db.relationship('StudyRoom', '''foreign_keys=[StudyRoom.owner_id_email]''', backref='owner')
 
     def __repr__(self):
         return 'Owner %r %r (%r)' % self.name, self.surname, self.email
