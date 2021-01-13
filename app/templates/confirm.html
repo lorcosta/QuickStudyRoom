@@ -1,0 +1,52 @@
+{% extends 'base_template.html' %}
+
+{% block pagecontent %}
+<div class="bg-primary">
+     <div id="layoutAuthentication">
+            <div id="layoutAuthentication_content">
+                <main>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-5">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Confirm your account</h3></div>
+                                    <div class="card-body"><h5 class="text-center font-weight-light my-5">You can get your confirmation code in your mail. Please, give a look inside your Spam Folder.</h5>
+                                        <form method="POST">
+                                            {{ form.hidden_tag() }}
+                                            <div class="form-group">
+                                                {{ form.code.label(class='small mb-1') }}
+                                                {{ form.code(class='form-control py-4')}}
+                                                {% for error in form.code.errors %}
+                                                     <div class="alert alert-danger" role="alert">
+                                                        {{ error }}
+                                                    </div>
+                                                {% endfor  %}
+                                            </div>
+                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                                                {{form.submit(class='btn btn-primary btn-block')}}
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+            <div id="layoutAuthentication_footer">
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Your Website 2020</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+     </div>
+</div>
+{% endblock pagecontent%}

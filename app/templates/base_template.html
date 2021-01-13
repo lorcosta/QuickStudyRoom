@@ -5,13 +5,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Dashboard - SB Admin</title>
+        <meta name="QuickStudyRoom" content="StudyRoom Reservations" />
+        <title>{{ title }}</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_dashboard.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
-    <body class="bg-primary">
+    <body>
     {% block pagecontent %}
     {% endblock pagecontent %}
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
@@ -19,7 +20,3 @@
         <script src="{{ url_for('static', filename='js/scripts_dashboard.js') }}"></script>
     </body>
 </html>
-<!--
-Come mai non viene colorato in modo corretto il linguaggio tra parentesi {}?
-Configurare correttamente il base-template in modo che non si debba ripetere in ogni pagina url_for
- -->

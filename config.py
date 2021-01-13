@@ -21,6 +21,7 @@ class Config(object):
 
 class DevConfig(Config):
     DEBUG = True
+    THREADED = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + path.join(basedir, 'DEV.db')
     SQLALCHEMY_BINDS = getenv('SQLALCHEMY_BINDS')

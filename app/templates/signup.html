@@ -1,6 +1,7 @@
 {% extends 'base_template.html' %}
-    <!-- Inserire campi del form di python nel form già presente qua sotto, diventeranno responsive e controllabili-->
+
 {% block pagecontent %}
+    <div class="bg-primary">
         <div id="layoutAuthentication">
             <div id="layoutAuthentication_content">
                 <main>
@@ -10,12 +11,12 @@
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
                                     <div class="card-body">
-                                        <form method="post">
+                                        <form method="POST">
                                             {{ form.hidden_tag() }}
                                             <div class="form-row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="small mb-1" for="inputFirstName">{{form.firstName.label}}</label>
+                                                        {{form.firstName.label(class='small mb-1')}}
                                                         {{form.firstName(class='form-control py-4')}}
                                                         {% for error in form.firstName.errors %}
                                                              <div class="alert alert-danger" role="alert">
@@ -27,7 +28,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="small mb-1" for="inputLastName">{{form.lastName.label}}</label>
+                                                        {{form.lastName.label(class='small mb-1')}}
                                                         {{form.lastName(class='form-control py-4')}}
                                                         {% for error in form.lastName.errors %}
                                                              <div class="alert alert-danger" role="alert">
@@ -39,7 +40,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="small mb-1" for="inputEmailAddress">{{form.email.label}}</label>
+                                                {{form.email.label(class='small mb-1')}}
                                                 {{form.email(class='form-control py-4')}}
                                                         {% for error in form.email.errors %}
                                                              <div class="alert alert-danger" role="alert">
@@ -51,7 +52,7 @@
                                             <div class="form-row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="small mb-1" for="inputPassword">{{form.password.label}}</label>
+                                                        {{form.password.label(class='small mb-1')}}
                                                         {{form.password(class='form-control py-4')}}
                                                         {% for error in form.password.errors %}
                                                              <div class="alert alert-danger" role="alert">
@@ -63,7 +64,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="small mb-1" for="inputConfirmPassword">{{form.confirmPassword.label}}</label>
+                                                        {{form.confirmPassword.label(class='small mb-1')}}
                                                         {{form.confirmPassword(class='form-control py-4')}}
                                                         {% for error in form.confirmPassword.errors %}
                                                              <div class="alert alert-danger" role="alert">
@@ -74,8 +75,12 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Sistemare esteticamente-->
-                                            <div class="form-group mt-4 mb-0">{{form.user_or_owner.label}} {{ form.user_or_owner }}</div>
+                                            <div class="form-group mt-4 mb-0">
+                                                <div class="form-check form-check-inline">
+                                                    {{form.user_or_owner.label}}
+                                                    {{ form.user_or_owner(class='form-check-input') }}
+                                                </div>
+                                            </div>
                                             <div class="form-group mt-4 mb-0">{{form.accept_terms}} {{ form.accept_terms.label }}</div>
 
                                             <div class="form-group mt-4 mb-0">{{ form.submit(class='btn btn-primary btn-block') }}</div>
@@ -83,7 +88,7 @@
                                         </form>
                                     </div>
                                     <div class="card-footer text-center">
-                                        <div class="small"><a href="login.html">Have an account? Go to login</a></div>
+                                        <div class="small"><a href="signin">Have an account? Go to login</a></div>
                                     </div>
                                 </div>
                             </div>
@@ -106,4 +111,5 @@
                 </footer>
             </div>
         </div>
+    </div>
 {% endblock pagecontent %}

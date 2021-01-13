@@ -1,0 +1,15 @@
+Dear {{ name }},
+
+You can confirm your account by saving this number below and insert it at this link:
+
+{{ url_for('auth.confirm', email=email, _external=True) }}
+
+Your confirmation code is:
+
+{{ code }}
+
+
+Kindly,
+Quick Study Room Staff
+
+Note: this message is generated automatically. Replies to this email address are not being monitored.
