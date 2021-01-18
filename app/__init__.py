@@ -39,6 +39,7 @@ def create_app(config=None):
         # TODO migration
         #migration.init_app(app, db)
         login_manager.init_app(app)
+        login_manager.login_view = 'auth.sign_in'
         pswManager.init_app(app)
         mail.init_app(app)
         # TODO register blueprint
@@ -50,6 +51,9 @@ def create_app(config=None):
 
         from app.errors import errors
         app.register_blueprint(errors)
+
+        from app.users import users
+        app.register_blueprint(users)
         # TODO add command to do things on the database
         app.cli.add_command(db_creation)
     return app

@@ -9,6 +9,12 @@ def hash_psw(psw):
     return pswManager.generate_password_hash(psw).decode('utf-8')
 
 
+def verify_psw(psw, email):
+    profile = get_profile_from_db(email=email)
+    psw_hash = getattr(profile, 'password')
+    return pswManager.check_password_hash(psw_hash, psw)
+
+
 def send_confirm_email(destination_profile, confirmation_code):
     message = Message('Welcome to Quick Study Room! Confirm your account',
                       recipients=[destination_profile.email],
@@ -20,5 +26,9 @@ def send_confirm_email(destination_profile, confirmation_code):
 
 
 def get_profile_from_db(email):
-    profile = User.query.filter_by(email=email).first() or Owner.query.filter_by(email=email).first()
+    if User.query.filter_by(email=email).first() is None:
+        profile = Owner.query.filter_by(email=email).first()
+    else:
+        profile = User.query.filter_by(email=email).first()
+    # profile = User.query.filter_by(email=email).first() or Owner.query.filter_by(email=email).first()
     return profile

@@ -6,8 +6,7 @@ from app import db
 from app.auth import auth
 from app.auth.forms import SignUpForm, SignInForm, ConfirmationForm
 
-# seems auth does not redirect correctly, main works but auth no
-from app.auth.utilities import hash_psw, send_confirm_email, get_profile_from_db
+from app.auth.utilities import hash_psw, send_confirm_email, get_profile_from_db, verify_psw
 from app.models import User, Owner
 
 
@@ -37,13 +36,14 @@ def sign_up():
 @auth.route('/signin',  methods=['GET', 'POST'])
 def sign_in():
     signInForm = SignInForm()
-
     if signInForm.validate_on_submit():
         #controllare credenziali per l'accesso
-        login_user(get_profile_from_db(signInForm.email.data))
-        # remember_me
-        # forgot_password
-        return redirect(url_for('main.dashboard'))
+        if verify_psw(psw=signInForm.password.data, email=signInForm.email.data):
+            login_user(get_profile_from_db(signInForm.email.data))
+            return redirect(url_for('main.dashboard'))
+        else:
+            signInForm.password.errors.append('Wrong password!')
+    # TODO set the remember me and forgot_password
     return render_template('signin.html', form=signInForm, title='Sign In')
 
 
@@ -61,7 +61,7 @@ def confirm(email):
         try:
             confirmationForm.code_confirmation(email=email, code=confirmationForm.code.data)
             # return redirect(url_for('main.dashboard'))
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.sign_in'))
         except ValidationError:
             confirmationForm.code.errors.append('The code inserted is wrong, check your email.')
     return render_template('confirm.html', form=confirmationForm, title='Confirm your account')

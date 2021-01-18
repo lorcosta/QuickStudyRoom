@@ -21,6 +21,7 @@ def database_creation():
 
 
 @main.route('/')
+@main.route('/home')
 def home():
     return render_template('template_homepage.html')
 
@@ -29,9 +30,9 @@ def home():
 @login_required
 def dashboard():
     if get_profile_from_db(current_user.get_id()).__class__ is User:
-        return render_template('dashboard_user.html')
+        return render_template('dashboard_user.html', title='Welcome to your profile')
     else:
-        return render_template('dashboard_owner.html')
+        return render_template('dashboard_owner.html', title='Welcome to your profile')
 
 
 

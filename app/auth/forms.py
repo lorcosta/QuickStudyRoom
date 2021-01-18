@@ -1,6 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, TextAreaField, SelectField, \
-    RadioField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, TextAreaField, RadioField
 from wtforms.validators import DataRequired, Length, Email, ValidationError, EqualTo
 from sqlalchemy import update
 from app import db
@@ -49,24 +48,8 @@ class SignInForm(FlaskForm):  # credential and password
     remember_me = BooleanField('Remember me!')
 
     def validate_email(self, email):
-        if not User.query.filter_by(email=email.data).first() or Owner.query.filter_by(email=email.data).first():
+        if not User.query.filter_by(email=email.data).first() and not Owner.query.filter_by(email=email.data).first():
             raise ValidationError('This email does not exist in the database. Insert your email')
-
-
-class CreateStudyRoomForm(FlaskForm):
-    name = StringField('Study Room Name',
-                       validators=[DataRequired(message='You need to insert the name of the study room')],
-                       render_kw={'placeholder': 'Your study room name'})
-    phone_num = IntegerField('Phone number', validators=[
-        DataRequired(message='You need to insert the reference number for the study room')],
-                             render_kw={'placeholder': 'Reference number for the study room'})
-    address = StringField('Address',
-                          validators=[DataRequired(message='You need to insert the full address of the study room')],
-                          render_kw={'placeholder': 'Your study room\'s address'})
-    services = TextAreaField('Services', render_kw={'placeholder': 'Describe the services offered in the study room'})
-    total_seats = IntegerField('Total seats', validators=[
-        DataRequired(message='You need to provide the total seats of the study room')],
-                               render_kw={'placeholder': 'Enter total available seats'})
 
 
 class ConfirmationForm(FlaskForm):
@@ -83,5 +66,3 @@ class ConfirmationForm(FlaskForm):
                 return True
             else:
                 raise ValidationError('Your confirmation code is wrong! Check your email.')
-
-
