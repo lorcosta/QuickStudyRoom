@@ -1,4 +1,4 @@
-import os
+import os, random, string
 from datetime import datetime, timedelta
 from random import randint
 
@@ -42,7 +42,6 @@ class SuperUser(UserMixin):
 
     def get_id(self):
         return self.email
-
 
 
 class Reservation(db.Model):

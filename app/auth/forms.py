@@ -1,8 +1,11 @@
+import string
+import random
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, TextAreaField, RadioField
 from wtforms.validators import DataRequired, Length, Email, ValidationError, EqualTo
-from sqlalchemy import update
 from app import db
+from app.auth.utilities import hash_psw
 from app.models import User, Owner
 
 
@@ -60,9 +63,22 @@ class ConfirmationForm(FlaskForm):
         if User.query.filter_by(email=email).first() or Owner.query.filter_by(email=email).first():
             profile = User.query.filter_by(email=email).first() or Owner.query.filter_by(email=email).first()
             if code == profile.confirmation_code:
-                # profile.confirm_account() does need anymore
+                # profile.confirm_account() does not need anymore
                 setattr(profile, 'is_confirmed', True)
                 db.session.commit()
                 return True
             else:
                 raise ValidationError('Your confirmation code is wrong! Check your email.')
+
+
+class ForgotPasswordForm(FlaskForm):
+    email = email = StringField('Email Form', validators=[DataRequired(message='Insert your email')],
+                        render_kw={'placeholder': 'Your email'})
+    submit = SubmitField('Send password reset')
+
+    def password_reset(self, email):
+        if User.query.filter_by(email=email).first() or Owner.query.filter_by(email=email).first():
+            profile = User.query.filter_by(email=email).first() or Owner.query.filter_by(email=email).first()
+            newPassword = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(10))
+            setattr(profile, 'password', hash_psw(newPassword))
+            return newPassword

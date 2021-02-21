@@ -25,6 +25,14 @@ def send_confirm_email(destination_profile, confirmation_code):
     mail.send(message)
 
 
+def send_reset_password_email(destination_profile, new_password):
+    message = Message('Reset your Quick Study Room password',
+                      recipients=[destination_profile.email],
+                      sender=current_app.config['MAIL_USERNAME'])
+    message.body = render_template('email_template/password_reset.txt', name= destination_profile.name, newPassword=new_password)
+    mail.send(message)
+
+
 def get_profile_from_db(email):
     if User.query.filter_by(email=email).first() is None:
         profile = Owner.query.filter_by(email=email).first()
@@ -32,3 +40,11 @@ def get_profile_from_db(email):
         profile = User.query.filter_by(email=email).first()
     # profile = User.query.filter_by(email=email).first() or Owner.query.filter_by(email=email).first()
     return profile
+
+
+def is_user_confirmed(email):
+    profile = get_profile_from_db(email)
+    if profile.is_confirmed == 1:
+        return True
+    else:
+        return False
