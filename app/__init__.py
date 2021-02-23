@@ -54,6 +54,9 @@ def create_app(config=None):
 
         from app.users import users
         app.register_blueprint(users)
+
+        from app.studyrooms import studyrooms
+        app.register_blueprint(studyrooms)
         # TODO add command to do things on the database
         app.cli.add_command(db_creation)
     return app

@@ -43,6 +43,12 @@ class SuperUser(UserMixin):
     def get_id(self):
         return self.email
 
+    def get_type(self):
+        if self.__class__ is User:
+            return 'U'
+        else:
+            return 'O'
+
 
 class Reservation(db.Model):
     __tablename__ = 'reservations'
@@ -72,19 +78,23 @@ class StudyRoom(db.Model):
     __tablename__ = 'studyRooms'
     id = db.Column(db.Integer, primary_key=True)
     owner_id_email = db.Column(db.String, db.ForeignKey('owners.email'))
-    mail_contact = db.Column(db.String, nullable=True, default='owners.email')  # default is correct?
+    mail_contact = db.Column(db.String, nullable=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
     phone_num = db.Column(db.String(20))
     address = db.Column(db.String, nullable=False)  # full address, street, city, country, zip code
-    bookable = db.Column(db.Boolean, nullable=False, default=True)  # fast check if a studyRoom is bookable, default??
-    # what default value is correct for bookable? We need to check continuously the number of seats
-    services = db.Column(db.String)
-    seats_booked = db.Column(db.Integer, nullable=False, default=0)
-    seats_max = db.Column(db.Integer, nullable=False)
+    city = db.Column(db.String, nullable=False)
+    nation = db.Column(db.String, nullable=False)
+    postal_code = db.Column(db.String, nullable=False)
+    bookable = db.Column(db.Boolean, nullable=False, default=True)  # fast check if a studyRoom is bookable
+    toilette = db.Column(db.Boolean, nullable=False, default=False)
+    vending_machines = db.Column(db.Boolean, nullable=False, default=False)
+    wi_fi = db.Column(db.Boolean, nullable=False, default=False)
+    electrical_outlets = db.Column(db.Boolean, nullable=False, default=False)
+    printer = db.Column(db.Boolean, nullable=False, default=False)
+    others = db.Column(db.String)
+    seats = db.Column(db.Integer, nullable=False)
     reservations = db.relationship('Reservation', foreign_keys=[Reservation.study_room_id],
                                    backref=db.backref('study_room_obj'))
-
-    # bagno, macchinette per cibo, macchinette per caffe', internet, prese elettriche, fotocopiatrice,
 
     def __repr__(self):
         return 'Study Room num. %r, %r. Owner contact: %r' % self.id, self.name, self.owner_id_email

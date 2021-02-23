@@ -13,7 +13,7 @@ class SignUpForm(FlaskForm):
     firstName = StringField('First Name', validators=[DataRequired(message='You need to insert your firstname')],
                             render_kw={'placeholder': 'Your firstname'})
     lastName = StringField('Surname', validators=[DataRequired(message='You need to insert your lastname')],
-                           render_kw={'placeholder': 'Your lastname'})
+                           render_kw={'placeholder': 'Your surname'})
     email = StringField('Email',
                         validators=[DataRequired(message='You need to insert your email'), Length(min=6, max=64),
                                     Email()], render_kw={'placeholder': 'Your email'})

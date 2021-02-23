@@ -13,7 +13,6 @@ from app.models import User, Owner
 
 @auth.route('/signup', methods=['GET', 'POST'])
 def sign_up():
-    #check if user is authenticated
     signUpForm = SignUpForm()
     if signUpForm.validate_on_submit():
         if signUpForm.user_or_owner.data == 'user':
@@ -38,7 +37,6 @@ def sign_up():
 def sign_in():
     signInForm = SignInForm()
     if signInForm.validate_on_submit():
-        #controllare credenziali per l'accesso
         if verify_psw(psw=signInForm.password.data, email=signInForm.email.data):
             if is_user_confirmed(email=signInForm.email.data):
                 login_user(get_profile_from_db(signInForm.email.data))
@@ -47,7 +45,7 @@ def sign_in():
                 signInForm.password.errors.append('Your profile is not yet verified! Check your email and follow instructions')
         else:
             signInForm.password.errors.append('Wrong password!')
-    # TODO set the remember me and forgot_password
+    # TODO set the remember me
     return render_template('signin.html', form=signInForm, title='Sign In')
 
 
@@ -81,6 +79,3 @@ def forgot_password():
         db.session.commit()
         return redirect(url_for('auth.sign_in'))
     return render_template('forgot_password.html', form=forgotPasswordForm, title='Reset your password')
-
-
-
