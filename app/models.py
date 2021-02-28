@@ -60,8 +60,6 @@ class User(db.Model, SuperUser):
     cc_exp = db.Column(db.DateTime)  # the day of expiration is always the last day of the month
     reservations = db.relationship('Reservation', foreign_keys=[Reservation.user_email], backref=db.backref('user'))
 
-    def __repr__(self):
-        return 'User {} {} ({})'.format(self.name, self.surname, self.email)
 
 
 class Slot(db.Model):
@@ -74,8 +72,6 @@ class Slot(db.Model):
     reservations = db.relationship('Reservation', foreign_keys=[Reservation.slot_id], backref=db.backref('slot'))
     available_seats = db.Column(db.Integer)
 
-    def __repr__(self):
-        return 'Reservation num. %r, user %r' % self.id, self.user
 
 
 class StudyRoom(db.Model):
@@ -124,5 +120,3 @@ class Owner(db.Model, SuperUser):
     __tablename__ = 'owners'
     studyrooms = db.relationship('StudyRoom', foreign_keys=[StudyRoom.owner_id_email], backref=db.backref('owner'))
 
-    def __repr__(self):
-        return 'Owner %r %r (%r)' % self.name, self.surname, self.email

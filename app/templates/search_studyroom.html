@@ -134,7 +134,7 @@
                                                         <td>{{ studyroom.city }}</td>
                                                         <td>{{ studyroom.postal_code }}</td>
                                                         <td>{{ studyroom.address }}</td>
-                                                        <td><a href="" class="btn btn-primary">View Availability</a></td>
+                                                        <td><a href="{{ url_for('studyrooms.view_availability', id=studyroom.id) }}" class="btn btn-primary">View Availability</a></td>
                                                     </tr>
                                                     {% endfor %}
                                                 </tbody>

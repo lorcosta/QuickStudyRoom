@@ -9,6 +9,9 @@ def get_studyroom(id):
     return studyroom
 
 
+def get_slot(id):
+    return Slot.query.filter_by(id=id).first()
+
 def update_StudyroomInformation(studyroom, name, city, address, nation, postal_code, seats, mail_contact,
                                 phone_num, toilette, vending_machines, wi_fi, electrical_outlets, printer, others):
     setattr(studyroom, 'name', name)
@@ -32,7 +35,7 @@ def allow_reservation(studyroom):
         setattr(studyroom, 'bookable', True)
         weekdays = {0: studyroom.monday, 1: studyroom.tuesday, 2: studyroom.wednesday, 3: studyroom.thursday,
                     4: studyroom.friday, 5: studyroom.saturday, 6: studyroom.sunday}
-        for days in range(1, 7):
+        for days in range(1, 7): # TODO controllare corretta creazione di slot
             data = datetime.utcnow().date() + timedelta(days=days)
             if weekdays[data.weekday()]:
                 db.session.add(Slot(date=data, morning=True, afternoon=False, studyroom_id=studyroom.id,
@@ -53,3 +56,10 @@ def search_studyroom(city, postal_code, name):
     if len(name) is not 0:
         results = results.filter(StudyRoom.name == name)
     return results.all()
+
+
+def available_slots(studyroom):
+    results = Slot.query.filter_by(studyroom_id=studyroom.id).order_by(Slot.date, Slot.morning).all()
+    print results
+    return results
+

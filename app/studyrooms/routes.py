@@ -6,11 +6,12 @@ from flask_login import login_required, current_user
 
 from app import db, photos
 from app.auth.utilities import get_profile_from_db
-from app.models import Owner, StudyRoom, User
+from app.models import Owner, StudyRoom, User, Reservation
 from app.studyrooms import studyrooms
 from app.studyrooms.forms import AddStudyroomForm, ModifyStudyroomForm, UploadPhotoForm, SlotAvailabilityForm, \
     SearchStudyRoomForm
-from app.studyrooms.utilities import get_studyroom, update_StudyroomInformation, allow_reservation, search_studyroom
+from app.studyrooms.utilities import get_studyroom, update_StudyroomInformation, allow_reservation, search_studyroom, \
+    available_slots, get_slot
 
 
 @studyrooms.route('/addStudyroom', methods=['GET', 'POST'])
@@ -88,9 +89,9 @@ def modify_studyroom(id):
                            form_upload=uploadPhotoForm, form_slot=slotAvailabilityForm, fileList=fileList)
 
 
-@studyrooms.route('/booking', methods=['GET', 'POST'])
+@studyrooms.route('/search', methods=['GET', 'POST'])
 @login_required
-def booking():
+def search():
     if current_user.get_type() is User:
         searchStudyroomForm = SearchStudyRoomForm()
         results = search_studyroom(city='', postal_code='', name='')
@@ -100,3 +101,24 @@ def booking():
         return render_template('search_studyroom.html', title='Search a Study Room', form=searchStudyroomForm, results=results)
     else:
         return flask.abort(401)
+
+
+@studyrooms.route('/view_availability/<id>', methods=['GET', 'POST'])
+@login_required
+def view_availability(id):
+    studyroom = get_studyroom(id)
+    fileList = os.listdir(os.getcwd() + '/app/static/images/' + str(studyroom.id))
+    fileList = [str(studyroom.id) + "/" + file for file in fileList]
+    slots = available_slots(studyroom)
+    return render_template('book_studyroom.html', title='Book A Study Room', studyroom=studyroom, fileList=fileList, slots=slots)
+
+
+@studyrooms.route('/book_studyroom/<slot_id>')
+@login_required
+def book_studyroom(slot_id):
+    slot = get_slot(slot_id)
+    reservation = Reservation(user_email=current_user.get_id(), slot_id=slot_id)
+    setattr(slot, 'available_seats', slot.available_seats-1)
+    db.session.add(reservation)
+    db.session.commit()
+    return redirect(url_for('users.dashboard'))
