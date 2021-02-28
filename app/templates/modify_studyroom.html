@@ -1,0 +1,354 @@
+{% extends 'dashboard_template.html' %}
+
+{% block dashboard_content %}
+                    <div class="container-fluid">
+                        <h1 class="mt-4"> Modify {{ studyroom.name }}</h1>
+                            <div class="col-xl-12">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-info-circle"></i>
+                                        Information
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="POST">
+                                            {{ form.hidden_tag() }}
+                                            <div class="form-row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        {{form.name.label(class='small mb-1')}}
+                                                        {{form.name(class='form-control py-4', value=studyroom.name)}}
+                                                        {% for error in form.name.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        {{form.seats.label(class='small mb-1')}}
+                                                        {{form.seats(class='form-control py-4', value=studyroom.seats)}}
+                                                        {% for error in form.seats.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        {{form.nation.label(class='small mb-1')}}
+                                                        {{form.nation(class='form-control py-4', value=studyroom.nation)}}
+                                                        {% for error in form.nation.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        {{form.city.label(class='small mb-1')}}
+                                                        {{form.city(class='form-control py-4', value=studyroom.city)}}
+                                                        {% for error in form.city.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        {{form.address.label(class='small mb-1')}}
+                                                        {{form.address(class='form-control py-4', value=studyroom.address)}}
+                                                        {% for error in form.address.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        {{form.postal_code.label(class='small mb-1')}}
+                                                        {{form.postal_code(class='form-control py-4', value=studyroom.postal_code)}}
+                                                        {% for error in form.postal_code.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        {{form.phone_num.label(class='small mb-1')}}
+                                                        {{form.phone_num(class='form-control py-4', value=studyroom.phone_num)}}
+                                                        {% for error in form.phone_num.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        {{form.mail_contact.label(class='small mb-1')}}
+                                                        {{form.mail_contact(class='form-control py-4', value=studyroom.mail_contact)}}
+                                                        {% for error in form.mail_contact.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <label class=" mb-1">Services:</label>
+                                            <div class="form-row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form.toilette(class='custom-control-input', checked=studyroom.toilette)}}
+                                                            {{form.toilette.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form.vending_machines(class='custom-control-input', checked=studyroom.vending_machines)}}
+                                                            {{form.vending_machines.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        {{form.others.label(class='small mb-1')}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form.wi_fi(class='custom-control-input', checked=studyroom.wi_fi)}}
+                                                            {{form.wi_fi.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form.electrical_outlets(class='custom-control-input', checked=studyroom.electrical_outlets)}}
+                                                            {{form.electrical_outlets.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        {{form.others(class='form-control py-2', value=studyroom.others)}}
+                                                        {% for error in form.others.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form.printer(class='custom-control-input', checked=studyroom.printer)}}
+                                                            {{form.printer.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mt-4 mb-0">{{ form.submit_info(class='btn btn-primary btn-block') }}</div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-camera"></i>
+                                        {{ studyroom.name }} photo's
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="POST" enctype="multipart/form-data">
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {% with messages = get_flashed_messages(category_filter=['success']) %}
+                                                            {% if messages %}
+                                                                {% for message in messages %}
+                                                                    <div class="alert alert-success">
+                                                                        {{ message }}
+                                                                     </div>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        {% endwith %}
+                                                        {{ form_upload.hidden_tag() }}
+                                                        {{ form_upload.file.label }}
+                                                        {{ form_upload.file }}
+                                                        {{ form_upload.upload(class='btn btn-primary') }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div class="album py-5 bg-light">
+                                            <div class="container">
+                                                <div class="row">
+                                                    {% for file in fileList %}
+                                                    <div class="col-md-4">
+                                                        <div class="card mb-4 shadow-sm">
+                                                            <img class='upload-img' src='{{ url_for("static",filename="images/"+file) }}' alt="Study Room's image">
+                                                        </div>
+                                                    </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-calendar-check"></i>
+                                        {{ studyroom.name }} availability
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="POST">
+                                            {{ form.hidden_tag() }}
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{form_slot.open_morning.label(class='small mb-1')}}
+                                                        {{form_slot.open_morning(class='form-control py-4', value=studyroom.open_morning)}}
+                                                        {% for error in form_slot.open_morning.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{form_slot.close_morning.label(class='small mb-1')}}
+                                                        {{form_slot.close_morning(class='form-control py-4', value=studyroom.close_morning)}}
+                                                        {% for error in form_slot.close_morning.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{form_slot.open_evening.label(class='small mb-1')}}
+                                                        {{form_slot.open_evening(class='form-control py-4', value=studyroom.open_evening)}}
+                                                        {% for error in form_slot.open_evening.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{form_slot.close_evening.label(class='small mb-1')}}
+                                                        {{form_slot.close_evening(class='form-control py-4', value=studyroom.close_evening)}}
+                                                        {% for error in form_slot.close_evening.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <label class=" mb-1">Days available:</label>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form_slot.monday(class='custom-control-input', checked=studyroom.monday)}}
+                                                            {{form_slot.monday.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form_slot.tuesday(class='custom-control-input', checked=studyroom.tuesday)}}
+                                                            {{form_slot.tuesday.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form_slot.wednesday(class='custom-control-input', checked=studyroom.wednesday)}}
+                                                            {{form_slot.wednesday.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form_slot.thursday(class='custom-control-input', checked=studyroom.thursday)}}
+                                                            {{form_slot.thursday.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form_slot.friday(class='custom-control-input', checked=studyroom.friday)}}
+                                                            {{form_slot.friday.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form_slot.saturday(class='custom-control-input', checked=studyroom.saturday)}}
+                                                            {{form_slot.saturday.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form_slot.sunday(class='custom-control-input', checked=studyroom.sunday)}}
+                                                            {{form_slot.sunday.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mt-4 mb-0">{{ form_slot.submit(class='btn btn-primary btn-block') }}</div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+{% endblock dashboard_content %}

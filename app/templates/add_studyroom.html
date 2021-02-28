@@ -1,0 +1,182 @@
+{% extends 'dashboard_template.html' %}
+
+{% block dashboard_content %}
+                 <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-7">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Modify your Information</h3></div>
+                                    <div class="card-body">
+                                        <form method="POST">
+                                            {{ form.hidden_tag() }}
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{form.name.label(class='small mb-1')}}
+                                                        {{form.name(class='form-control py-4')}}
+                                                        {% for error in form.name.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{form.nation.label(class='small mb-1')}}
+                                                        {{form.nation(class='form-control py-4')}}
+                                                        {% for error in form.nation.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{form.city.label(class='small mb-1')}}
+                                                        {{form.city(class='form-control py-4')}}
+                                                        {% for error in form.city.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{form.address.label(class='small mb-1')}}
+                                                        {{form.address(class='form-control py-4')}}
+                                                        {% for error in form.address.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{form.postal_code.label(class='small mb-1')}}
+                                                        {{form.postal_code(class='form-control py-4')}}
+                                                        {% for error in form.postal_code.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{form.seats.label(class='small mb-1')}}
+                                                        {{form.seats(class='form-control py-4')}}
+                                                        {% for error in form.seats.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <label class=" mb-1">Contacts:</label>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{form.contact_phoneNumber.label(class='small mb-1')}}
+                                                        {{form.contact_phoneNumber(class='form-control py-4')}}
+                                                        {% for error in form.contact_phoneNumber.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{form.contact_mail.label(class='small mb-1')}}
+                                                        {{form.contact_mail(class='form-control py-4')}}
+                                                        {% for error in form.contact_mail.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <label class=" mb-1">Services:</label>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form.toilette(class='custom-control-input')}}
+                                                            {{form.toilette.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form.vending_machines(class='custom-control-input')}}
+                                                            {{form.vending_machines.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form.wi_fi(class='custom-control-input')}}
+                                                            {{form.wi_fi.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form.electrical_outlets(class='custom-control-input')}}
+                                                            {{form.electrical_outlets.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            {{form.printer(class='custom-control-input')}}
+                                                            {{form.printer.label(class='custom-control-label')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{form.others.label(class='small mb-1')}}
+                                                        {{form.others(class='form-control py-4')}}
+                                                        {% for error in form.others.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mt-4 mb-0">{{ form.submit(class='btn btn-primary btn-block') }}</div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+{% endblock dashboard_content %}

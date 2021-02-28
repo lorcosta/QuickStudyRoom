@@ -1,0 +1,148 @@
+{% extends 'dashboard_template.html' %}
+
+{% block dashboard_content %}
+                    <div class="container-fluid">
+                        <h1 class="mt-4">Search a Study Room</h1>
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table mr-1"></i>
+                                Filters
+                            </div>
+                            <div class="card-body">
+                                <form method="POST">
+                                    {{ form.hidden_tag() }}
+                                    <div class="form-row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                {{form.name.label(class='small mb-1')}}
+                                                {{form.name(class='form-control py-4')}}
+                                                {% for error in form.name.errors %}
+                                                     <div class="alert alert-danger" role="alert">
+                                                        {{ error }}
+                                                    </div>
+                                                {% endfor  %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                {{form.city.label(class='small mb-1')}}
+                                                {{form.city(class='form-control py-4')}}
+                                                {% for error in form.city.errors %}
+                                                     <div class="alert alert-danger" role="alert">
+                                                        {{ error }}
+                                                    </div>
+                                                {% endfor  %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                {{form.postal_code.label(class='small mb-1')}}
+                                                {{form.postal_code(class='form-control py-4')}}
+                                                {% for error in form.postal_code.errors %}
+                                                     <div class="alert alert-danger" role="alert">
+                                                        {{ error }}
+                                                    </div>
+                                                {% endfor  %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                {{form.date.label(class='small mb-1')}}
+                                                {{form.date(class='form-control py-4')}}
+                                                {% for error in form.date.errors %}
+                                                     <div class="alert alert-danger" role="alert">
+                                                        {{ error }}
+                                                    </div>
+                                                {% endfor  %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label class=" mb-1">Services:</label>
+                                    <div class="form-row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <div class="custom-control custom-checkbox">
+                                                    {{form.toilette(class='custom-control-input')}}
+                                                    {{form.toilette.label(class='custom-control-label')}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <div class="custom-control custom-checkbox">
+                                                    {{form.vending_machines(class='custom-control-input')}}
+                                                    {{form.vending_machines.label(class='custom-control-label')}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <div class="custom-control custom-checkbox">
+                                                    {{form.wi_fi(class='custom-control-input')}}
+                                                    {{form.wi_fi.label(class='custom-control-label')}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <div class="custom-control custom-checkbox">
+                                                    {{form.electrical_outlets(class='custom-control-input')}}
+                                                    {{form.electrical_outlets.label(class='custom-control-label')}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <div class="custom-control custom-checkbox">
+                                                    {{form.printer(class='custom-control-input')}}
+                                                    {{form.printer.label(class='custom-control-label')}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mt-4 mb-0">{{ form.submit(class='btn btn-primary btn-block') }}</div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-12">
+                                    <div class="card-header">
+                                        Available Study Room
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>City</th>
+                                                        <th>Postal Code</th>
+                                                        <th>Address</th>
+                                                        <th>View Study Room</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for studyroom in results: %}
+                                                    <tr>
+                                                        <td>{{ studyroom.name }}</td>
+                                                        <td>{{ studyroom.city }}</td>
+                                                        <td>{{ studyroom.postal_code }}</td>
+                                                        <td>{{ studyroom.address }}</td>
+                                                        <td><a href="" class="btn btn-primary">View Availability</a></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+{% endblock dashboard_content %}

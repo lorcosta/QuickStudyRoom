@@ -1,5 +1,5 @@
-import os, random, string
-from datetime import datetime, timedelta
+import os
+from datetime import time
 from random import randint
 
 from flask_login import UserMixin
@@ -34,34 +34,24 @@ class SuperUser(UserMixin):
     def confirm_account(self):
         self.is_confirmed = True
 
-    def set_file_path(self):
-        if not self.email:
-            os.chdir(os.getcwd() + '/app/static')
-            if not os.path.exists(self.email):
-                os.makedirs(self.email)
-
     def get_id(self):
         return self.email
 
     def get_type(self):
+        return self.__class__
+
+    def get_type_str(self):
         if self.__class__ is User:
-            return 'U'
+            return 'User'
         else:
-            return 'O'
+            return 'Owner'
 
 
 class Reservation(db.Model):
     __tablename__ = 'reservations'
     id = db.Column(db.Integer, primary_key=True, index=True)
-    user_email = db.Column(db.String, db.ForeignKey('users.email'), index=True, nullable=False)
-    study_room_id = db.Column(db.Integer, db.ForeignKey('studyRooms.id'), index=True, nullable=False)
-    start_datetime = db.Column(db.DateTime, index=True, nullable=False)
-    # TODO change the datetime, it should be time of the reservation not now!!
-    duration = timedelta(hours=1)
-    end_datetime = db.Column(db.DateTime, default=datetime.now() + duration, index=True, nullable=False)
-
-    def __repr__(self):
-        return 'Reservation num. %r, user %r' % self.id, self.user
+    user_email = db.Column(db.String, db.ForeignKey('users.email'))
+    slot_id = db.Column(db.Integer, db.ForeignKey('slots.id'))
 
 
 class User(db.Model, SuperUser):
@@ -72,6 +62,20 @@ class User(db.Model, SuperUser):
 
     def __repr__(self):
         return 'User {} {} ({})'.format(self.name, self.surname, self.email)
+
+
+class Slot(db.Model):
+    __tablename__ = 'slots'
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date, nullable=False)
+    morning = db.Column(db.Boolean, nullable=False)
+    afternoon = db.Column(db.Boolean, nullable=False)
+    studyroom_id = db.Column(db.Integer, db.ForeignKey('studyRooms.id'))
+    reservations = db.relationship('Reservation', foreign_keys=[Reservation.slot_id], backref=db.backref('slot'))
+    available_seats = db.Column(db.Integer)
+
+    def __repr__(self):
+        return 'Reservation num. %r, user %r' % self.id, self.user
 
 
 class StudyRoom(db.Model):
@@ -85,7 +89,7 @@ class StudyRoom(db.Model):
     city = db.Column(db.String, nullable=False)
     nation = db.Column(db.String, nullable=False)
     postal_code = db.Column(db.String, nullable=False)
-    bookable = db.Column(db.Boolean, nullable=False, default=True)  # fast check if a studyRoom is bookable
+    bookable = db.Column(db.Boolean, nullable=False, default=False)  # fast check if a studyRoom is bookable
     toilette = db.Column(db.Boolean, nullable=False, default=False)
     vending_machines = db.Column(db.Boolean, nullable=False, default=False)
     wi_fi = db.Column(db.Boolean, nullable=False, default=False)
@@ -93,16 +97,32 @@ class StudyRoom(db.Model):
     printer = db.Column(db.Boolean, nullable=False, default=False)
     others = db.Column(db.String)
     seats = db.Column(db.Integer, nullable=False)
-    reservations = db.relationship('Reservation', foreign_keys=[Reservation.study_room_id],
-                                   backref=db.backref('study_room_obj'))
+    open_morning = db.Column(db.Time, default=time(hour=8, minute=0))
+    close_morning = db.Column(db.Time, default=time(hour=13, minute=0))
+    open_evening = db.Column(db.Time, default=time(hour=14, minute=0))
+    close_evening = db.Column(db.Time, default=time(hour=20, minute=0))
+    monday = db.Column(db.Boolean, nullable=False, default=True)  # True=open
+    tuesday = db.Column(db.Boolean, nullable=False, default=True)
+    wednesday = db.Column(db.Boolean, nullable=False, default=True)
+    thursday = db.Column(db.Boolean, nullable=False, default=True)
+    friday = db.Column(db.Boolean, nullable=False, default=True)
+    saturday = db.Column(db.Boolean, nullable=False, default=True)
+    sunday = db.Column(db.Boolean, nullable=False, default=False)
+    slots = db.relationship('Slot', foreign_keys=[Slot.studyroom_id], backref=db.backref('studyRoom'))
+    # TODO add photos??
 
-    def __repr__(self):
-        return 'Study Room num. %r, %r. Owner contact: %r' % self.id, self.name, self.owner_id_email
+    def set_file_path(self):
+        if not self.id:
+            os.chdir(os.getcwd() + '/app/static')
+            if not os.path.exists(str(self.id)):
+                os.makedirs(str(self.id))
+    # def __repr__(self):
+        # return 'Study Room num. %r, %r. Owner contact: %r' % self.id, self.name, self.owner_id_email
 
 
 class Owner(db.Model, SuperUser):
     __tablename__ = 'owners'
-    reservations = db.relationship('StudyRoom', foreign_keys=[StudyRoom.owner_id_email], backref=db.backref('owner'))
+    studyrooms = db.relationship('StudyRoom', foreign_keys=[StudyRoom.owner_id_email], backref=db.backref('owner'))
 
     def __repr__(self):
         return 'Owner %r %r (%r)' % self.name, self.surname, self.email

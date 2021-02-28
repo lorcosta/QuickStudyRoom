@@ -17,23 +17,25 @@
                                         <thead>
                                             <tr>
                                                 <th>Study Room</th>
+                                                <th>City</th>
                                                 <th>Address</th>
                                                 <th>Total Seats</th>
-                                                <th>Services</th>
                                                 <th>Contacts</th>
                                                 <th>Modify</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <!-- TODO implementa logica di riempimento tabella -->
+                                            {% for studyroom in studyrooms%}
                                             <tr>
-                                                <td>Implementare</td>
-                                                <td>Logica</td>
-                                                <td>Riempimento</td>
-                                                <td>Tabella</td>
-                                                <td>!!!</td>
-                                                <td>Bottone modifica</td>
+                                                <td>{{ studyroom.name }}</td>
+                                                <td>{{ studyroom.city }}</td>
+                                                <td>{{ studyroom.address }}</td>
+                                                <td>{{ studyroom.seats }}</td>
+                                                <td>{{ studyroom.mail_contact }}, {{studyroom.phone_num}}</td>
+                                                <td><a href="{{ url_for('studyrooms.modify_studyroom', id=studyroom.id) }}" class="btn btn-primary">Modify</a></td>
                                             </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>

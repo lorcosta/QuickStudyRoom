@@ -7,6 +7,7 @@ from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, current_app
+from flask_uploads import UploadSet, IMAGES, configure_uploads, patch_request_class
 
 from config import set_config
 
@@ -17,6 +18,7 @@ pswManager = Bcrypt()
 mail = Mail()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
+photos = UploadSet('photos', IMAGES)
 
 
 @click.command(name='create_db', help='In theory it build the database')
@@ -42,6 +44,9 @@ def create_app(config=None):
         login_manager.login_view = 'auth.sign_in'
         pswManager.init_app(app)
         mail.init_app(app)
+
+        configure_uploads(app, photos)
+        patch_request_class(app, 16*1024*1024)
         # TODO register blueprint
         from app.main import main
         app.register_blueprint(main)

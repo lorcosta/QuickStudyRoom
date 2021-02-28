@@ -1,3 +1,4 @@
+import os
 from datetime import timedelta
 from os import getenv, path
 from devkit import set_env
@@ -17,6 +18,7 @@ class Config(object):
     MAIL_USERNAME = getenv('MAIL_USERNAME')
     MAIL_PASSWORD = getenv('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = getenv('MAIL_USERNAME')
+    UPLOADED_PHOTOS_DEST = os.getcwd()
 
 
 class DevConfig(Config):
@@ -25,6 +27,7 @@ class DevConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + path.join(basedir, 'DEV.db')
     SQLALCHEMY_BINDS = getenv('SQLALCHEMY_BINDS')
+    UPLOADED_PHOTOS_DEST = os.getcwd()
 
 
 class ProdConfig(Config):
