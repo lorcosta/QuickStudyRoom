@@ -12,6 +12,7 @@ def get_studyroom(id):
 def get_slot(id):
     return Slot.query.filter_by(id=id).first()
 
+
 def update_StudyroomInformation(studyroom, name, city, address, nation, postal_code, seats, mail_contact,
                                 phone_num, toilette, vending_machines, wi_fi, electrical_outlets, printer, others):
     setattr(studyroom, 'name', name)
@@ -59,7 +60,6 @@ def search_studyroom(city, postal_code, name):
 
 
 def available_slots(studyroom):
-    results = Slot.query.filter_by(studyroom_id=studyroom.id).order_by(Slot.date, Slot.morning).all()
-    print results
+    results = Slot.query.filter_by(studyroom_id=studyroom.id).order_by(Slot.date, Slot.afternoon).all()
     return results
 

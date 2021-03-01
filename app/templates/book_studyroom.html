@@ -26,11 +26,17 @@
                                                     <tr>
                                                         <td>{{ slots[i].date }}</td>
                                                         <td>Available seats: {{ slots[i].available_seats }}</td>
-
-                                                        <td><a href="{{ url_for('studyrooms.book_studyroom', slot_id=slots[i].id) }}" class="btn btn-primary">Book a seat</a></td>
+                                                        {% if slots[i].available_seats<=0: %}
+                                                            <td><a href="#" class="btn btn-primary">Book a seat</a></td>
+                                                        {% else: %}
+                                                            <td><a href="{{ url_for('studyrooms.book_studyroom', slot_id=slots[i].id) }}" class="btn btn-primary">Book a seat{{slots[i].id}}</a></td>
+                                                        {% endif %}
                                                         <td>Available seats: {{ slots[i+1].available_seats }}</td>
-
-                                                        <td><a href="{{ url_for('studyrooms.book_studyroom', slot_id=slots[i+1].id) }}" class="btn btn-primary">Book a seat</a></td>
+                                                        {% if slots[i+1].available_seats<=0: %}
+                                                            <td><a href="#" class="btn btn-primary">Book a seat</a></td>
+                                                        {% else: %}
+                                                            <td><a href="{{ url_for('studyrooms.book_studyroom', slot_id=slots[i+1].id) }}" class="btn btn-primary">Book a seat{{slots[i+1].id}}</a></td>
+                                                        {% endif %}
                                                     </tr>
                                                     {% endfor %}
                                                 </tbody>

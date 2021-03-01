@@ -110,6 +110,7 @@ def view_availability(id):
     fileList = os.listdir(os.getcwd() + '/app/static/images/' + str(studyroom.id))
     fileList = [str(studyroom.id) + "/" + file for file in fileList]
     slots = available_slots(studyroom)
+    # TODO do we show past slot? If a slot is this morning do we show it in the list?
     return render_template('book_studyroom.html', title='Book A Study Room', studyroom=studyroom, fileList=fileList, slots=slots)
 
 
@@ -117,8 +118,12 @@ def view_availability(id):
 @login_required
 def book_studyroom(slot_id):
     slot = get_slot(slot_id)
+    # TODO controlli da fare:current_user ha gia una prenotazione effettuata per questo slot?
     reservation = Reservation(user_email=current_user.get_id(), slot_id=slot_id)
-    setattr(slot, 'available_seats', slot.available_seats-1)
-    db.session.add(reservation)
-    db.session.commit()
-    return redirect(url_for('users.dashboard'))
+    if getattr(slot, 'available_seats') >= 0:
+        setattr(slot, 'available_seats', slot.available_seats-1)
+        db.session.add(reservation)
+        db.session.commit()
+        return redirect(url_for('users.dashboard'))
+    else:
+        flask.abort(401)

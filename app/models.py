@@ -61,7 +61,6 @@ class User(db.Model, SuperUser):
     reservations = db.relationship('Reservation', foreign_keys=[Reservation.user_email], backref=db.backref('user'))
 
 
-
 class Slot(db.Model):
     __tablename__ = 'slots'
     id = db.Column(db.Integer, primary_key=True)
@@ -71,7 +70,6 @@ class Slot(db.Model):
     studyroom_id = db.Column(db.Integer, db.ForeignKey('studyRooms.id'))
     reservations = db.relationship('Reservation', foreign_keys=[Reservation.slot_id], backref=db.backref('slot'))
     available_seats = db.Column(db.Integer)
-
 
 
 class StudyRoom(db.Model):

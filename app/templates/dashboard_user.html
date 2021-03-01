@@ -19,21 +19,27 @@
                                                 <th>StudyRoom</th>
                                                 <th>Address</th>
                                                 <th>Day</th>
-                                                <th>Start Time</th>
-                                                <th>End Time</th>
+                                                <th>Time</th>
+                                                <th>Contacts</th>
                                                 <th>Delete</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <!-- TODO implementa logica di riempimento tabella -->
-                                            <tr>
-                                                <td>Implementare</td>
-                                                <td>Logica</td>
-                                                <td>Riempimento</td>
-                                                <td>Tabella</td>
-                                                <td>!!!</td>
-                                                <td>Bottone</td>
-                                            </tr>
+                                            {% for slot, studyroom in informations.items(): %}
+                                                <tr>
+                                                    <td>{{ studyroom.name }}</td>
+                                                    <td>{{ studyroom.city }}, {{ studyroom.address }}</td>
+                                                    <td>{{ slot.date }}</td>
+                                                    {% if slot.morning: %}
+                                                        <td>{{ studyroom.open_morning }}-{{ studyroom.close_morning }}</td>
+                                                    {% else: %}
+                                                        <td>{{ studyroom.open_evening }}-{{ studyroom.close_evening }}</td>
+                                                    {% endif %}
+                                                    <td>{{ studyroom.phone_num}}, {{ studyroom.mail_contact }}</td>
+                                                    <td>Bottone</td>
+                                                </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
