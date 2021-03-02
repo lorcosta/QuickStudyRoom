@@ -32,7 +32,7 @@
                                                 <td>{{ studyroom.address }}</td>
                                                 <td>{{ studyroom.seats }}</td>
                                                 <td>{{ studyroom.mail_contact }}, {{studyroom.phone_num}}</td>
-                                                <td><a href="{{ url_for('studyrooms.modify_studyroom', id=studyroom.id) }}" class="btn btn-primary">Modify</a></td>
+                                                <td><a href="{{ url_for('studyrooms.modify_studyroom', id=studyroom.id) }}" class="btn btn-primary">Manage</a></td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>

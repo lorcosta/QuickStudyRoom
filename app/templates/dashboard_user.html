@@ -25,19 +25,18 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- TODO implementa logica di riempimento tabella -->
-                                            {% for slot, studyroom in informations.items(): %}
+                                            {% for reservation, list in informations.items(): %}
                                                 <tr>
-                                                    <td>{{ studyroom.name }}</td>
-                                                    <td>{{ studyroom.city }}, {{ studyroom.address }}</td>
-                                                    <td>{{ slot.date }}</td>
-                                                    {% if slot.morning: %}
-                                                        <td>{{ studyroom.open_morning }}-{{ studyroom.close_morning }}</td>
+                                                    <td><a href="{{url_for('studyrooms.view_availability', id=list[1].id )}}">{{ list[1].name }}</a></td>
+                                                    <td>{{ list[1].city }}, {{ list[1].address }}</td>
+                                                    <td>{{ list[0].date }}</td>
+                                                    {% if list[0].morning: %}
+                                                        <td>{{ list[1].open_morning.strftime('%H:%M') }}-{{ list[1].close_morning.strftime('%H:%M') }}</td>
                                                     {% else: %}
-                                                        <td>{{ studyroom.open_evening }}-{{ studyroom.close_evening }}</td>
+                                                        <td>{{ list[1].open_evening.strftime('%H:%M') }}-{{ list[1].close_evening.strftime('%H:%M') }}</td>
                                                     {% endif %}
-                                                    <td>{{ studyroom.phone_num}}, {{ studyroom.mail_contact }}</td>
-                                                    <td>Bottone</td>
+                                                    <td>{{ list[1].phone_num}}, {{ list[1].mail_contact }}</td>
+                                                    <td><a href="{{ url_for('studyrooms.delete_reservation', reservation_id=reservation.id , slot_id=list[0].id ) }}" class="btn btn-primary">Delete Reservation</a></td>
                                                 </tr>
                                             {% endfor %}
                                         </tbody>

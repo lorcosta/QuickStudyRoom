@@ -31,12 +31,26 @@ def update_StudyroomInformation(studyroom, name, city, address, nation, postal_c
     setattr(studyroom, 'others', others)
 
 
+def update_day_and_hours(studyroom, form):
+    setattr(studyroom, 'monday', form.monday.data)
+    setattr(studyroom, 'tuesday', form.tuesday.data)
+    setattr(studyroom, 'wednesday', form.wednesday.data)
+    setattr(studyroom, 'thursday', form.thursday.data)
+    setattr(studyroom, 'friday', form.friday.data)
+    setattr(studyroom, 'saturday', form.saturday.data)
+    setattr(studyroom, 'sunday', form.sunday.data)
+    setattr(studyroom, 'open_morning', form.open_morning.data)
+    setattr(studyroom, 'close_morning', form.close_morning.data)
+    setattr(studyroom, 'open_evening', form.open_evening.data)
+    setattr(studyroom, 'close_evening', form.close_evening.data)
+
+
 def allow_reservation(studyroom):
     if not studyroom.bookable:
         setattr(studyroom, 'bookable', True)
         weekdays = {0: studyroom.monday, 1: studyroom.tuesday, 2: studyroom.wednesday, 3: studyroom.thursday,
                     4: studyroom.friday, 5: studyroom.saturday, 6: studyroom.sunday}
-        for days in range(1, 7): # TODO controllare corretta creazione di slot
+        for days in range(1, 8):
             data = datetime.utcnow().date() + timedelta(days=days)
             if weekdays[data.weekday()]:
                 db.session.add(Slot(date=data, morning=True, afternoon=False, studyroom_id=studyroom.id,
@@ -47,7 +61,7 @@ def allow_reservation(studyroom):
         setattr(studyroom, 'bookable', False)
 
 
-def search_studyroom(city, postal_code, name):
+def search_studyroom(city, postal_code, name, date):
     results = StudyRoom.query
 
     if len(city) is not 0:
@@ -56,10 +70,20 @@ def search_studyroom(city, postal_code, name):
         results = results.filter(StudyRoom.postal_code == postal_code)
     if len(name) is not 0:
         results = results.filter(StudyRoom.name == name)
+    if date is not None:
+        studyrooms = results.all()
+        results_date = []
+        for studyroom in studyrooms:
+            slots = Slot.query
+            slot = slots.filter(Slot.studyroom_id == studyroom.id, Slot.date == date, Slot.available_seats > 0).first()
+            if slot is not None:
+                results_date.append(studyroom)
+        return results_date
     return results.all()
 
 
 def available_slots(studyroom):
-    results = Slot.query.filter_by(studyroom_id=studyroom.id).order_by(Slot.date, Slot.afternoon).all()
+    results = Slot.query
+    results = results.filter(Slot.studyroom_id == studyroom.id, Slot.date >= datetime.utcnow().date()).order_by(Slot.date, Slot.afternoon).all()
     return results
 

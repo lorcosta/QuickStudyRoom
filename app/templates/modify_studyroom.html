@@ -229,7 +229,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         {{form_slot.open_morning.label(class='small mb-1')}}
-                                                        {{form_slot.open_morning(class='form-control py-4', value=studyroom.open_morning)}}
+                                                        {{form_slot.open_morning(class='form-control py-4', value=studyroom.open_morning.strftime('%H:%M'))}}
                                                         {% for error in form_slot.open_morning.errors %}
                                                              <div class="alert alert-danger" role="alert">
                                                                 {{ error }}
@@ -240,7 +240,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         {{form_slot.close_morning.label(class='small mb-1')}}
-                                                        {{form_slot.close_morning(class='form-control py-4', value=studyroom.close_morning)}}
+                                                        {{form_slot.close_morning(class='form-control py-4', value=studyroom.close_morning.strftime('%H:%M'))}}
                                                         {% for error in form_slot.close_morning.errors %}
                                                              <div class="alert alert-danger" role="alert">
                                                                 {{ error }}
@@ -253,7 +253,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         {{form_slot.open_evening.label(class='small mb-1')}}
-                                                        {{form_slot.open_evening(class='form-control py-4', value=studyroom.open_evening)}}
+                                                        {{form_slot.open_evening(class='form-control py-4', value=studyroom.open_evening.strftime('%H:%M'))}}
                                                         {% for error in form_slot.open_evening.errors %}
                                                              <div class="alert alert-danger" role="alert">
                                                                 {{ error }}
@@ -264,7 +264,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         {{form_slot.close_evening.label(class='small mb-1')}}
-                                                        {{form_slot.close_evening(class='form-control py-4', value=studyroom.close_evening)}}
+                                                        {{form_slot.close_evening(class='form-control py-4', value=studyroom.close_evening.strftime('%H:%M'))}}
                                                         {% for error in form_slot.close_evening.errors %}
                                                              <div class="alert alert-danger" role="alert">
                                                                 {{ error }}

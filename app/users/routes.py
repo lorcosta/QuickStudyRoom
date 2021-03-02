@@ -22,7 +22,7 @@ def dashboard():
         for reservation in reservations:
             slot = Slot.query.filter_by(id=reservation.slot_id).first()
             studyroom = StudyRoom.query.filter_by(id=slot.studyroom_id).first()
-            informations.update({slot: studyroom})
+            informations.update({reservation: [slot, studyroom]})
         return render_template('dashboard_user.html', title='Welcome to your profile', informations=informations)
     else:
         studyrooms = StudyRoom.query.filter_by(owner_id_email=current_user.get_id()).all()

@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 import flask
 from flask import render_template, redirect, url_for, flash, abort
@@ -6,12 +7,12 @@ from flask_login import login_required, current_user
 
 from app import db, photos
 from app.auth.utilities import get_profile_from_db
-from app.models import Owner, StudyRoom, User, Reservation
+from app.models import Owner, StudyRoom, User, Reservation, Slot
 from app.studyrooms import studyrooms
 from app.studyrooms.forms import AddStudyroomForm, ModifyStudyroomForm, UploadPhotoForm, SlotAvailabilityForm, \
     SearchStudyRoomForm
 from app.studyrooms.utilities import get_studyroom, update_StudyroomInformation, allow_reservation, search_studyroom, \
-    available_slots, get_slot
+    available_slots, get_slot, update_day_and_hours
 
 
 @studyrooms.route('/addStudyroom', methods=['GET', 'POST'])
@@ -80,10 +81,15 @@ def modify_studyroom(id):
         db.session.commit()
     if slotAvailabilityForm.submit.data and slotAvailabilityForm.validate_on_submit() and not studyroom.bookable:
         # TODO remove the last condition and define the right procedure to block rerservations
+        '''update_day_and_hours(slotAvailabilityForm.monday.data, slotAvailabilityForm.monday.data, slotAvailabilityForm.monday.data,
+                             slotAvailabilityForm.monday.data, slotAvailabilityForm.monday.data, slotAvailabilityForm.monday.data,
+                             slotAvailabilityForm.monday.data, slotAvailabilityForm.open_morning.data, slotAvailabilityForm.close_morning.data,
+                             slotAvailabilityForm.open_evening.data, slotAvailabilityForm.close_evening.data)'''
+        update_day_and_hours(studyroom=studyroom, form=slotAvailabilityForm)
         allow_reservation(studyroom)
         db.session.commit()
     if studyroom.bookable:
-        slotAvailabilityForm.submit.label.text = 'Block reservations on your Study Room'
+        slotAvailabilityForm.submit.label.text = 'This Study Room is already available'
     return render_template('modify_studyroom.html', title='Modify your Study Room', studyroom=studyroom,
                            form=modifyStudyroomForm,
                            form_upload=uploadPhotoForm, form_slot=slotAvailabilityForm, fileList=fileList)
@@ -94,10 +100,10 @@ def modify_studyroom(id):
 def search():
     if current_user.get_type() is User:
         searchStudyroomForm = SearchStudyRoomForm()
-        results = search_studyroom(city='', postal_code='', name='')
+        results = search_studyroom(city='', postal_code='', name='', date=None)
         if searchStudyroomForm.validate_on_submit():
             results = search_studyroom(city=searchStudyroomForm.city.data, postal_code=searchStudyroomForm.postal_code.data,
-                                       name=searchStudyroomForm.name.data)
+                                       name=searchStudyroomForm.name.data, date=searchStudyroomForm.date.data)
         return render_template('search_studyroom.html', title='Search a Study Room', form=searchStudyroomForm, results=results)
     else:
         return flask.abort(401)
@@ -110,19 +116,37 @@ def view_availability(id):
     fileList = os.listdir(os.getcwd() + '/app/static/images/' + str(studyroom.id))
     fileList = [str(studyroom.id) + "/" + file for file in fileList]
     slots = available_slots(studyroom)
-    # TODO do we show past slot? If a slot is this morning do we show it in the list?
-    return render_template('book_studyroom.html', title='Book A Study Room', studyroom=studyroom, fileList=fileList, slots=slots)
+    return render_template('view_availability.html', title='Book A Study Room', studyroom=studyroom, fileList=fileList, slots=slots)
 
 
 @studyrooms.route('/book_studyroom/<slot_id>')
 @login_required
 def book_studyroom(slot_id):
     slot = get_slot(slot_id)
-    # TODO controlli da fare:current_user ha gia una prenotazione effettuata per questo slot?
-    reservation = Reservation(user_email=current_user.get_id(), slot_id=slot_id)
-    if getattr(slot, 'available_seats') >= 0:
+    existing_reservation = Reservation.query.filter_by(user_email=current_user.get_id(), slot_id=slot_id).first()
+    if slot.morning:
+        close = StudyRoom.query.filter_by(id=slot.studyroom_id).first().close_morning
+    else:
+        close = StudyRoom.query.filter_by(id=slot.studyroom_id).first().close_evening
+    if slot.available_seats > 0 and existing_reservation is None and datetime.utcnow().time() < close:
+        reservation = Reservation(user_email=current_user.get_id(), slot_id=slot_id)
         setattr(slot, 'available_seats', slot.available_seats-1)
         db.session.add(reservation)
+        db.session.commit()
+        return redirect(url_for('users.dashboard'))
+    else:
+        flash('You can\'t reserve this study room: there are not available seats or you already have a reservation or the time is over.', 'error')
+        return redirect(url_for('studyrooms.view_availability', id=slot.studyroom_id))
+
+
+@studyrooms.route('/delete_reservation/<reservation_id>')
+@login_required
+def delete_reservation(reservation_id):
+    reservation = Reservation.query.filter_by(id=reservation_id).first()
+    if reservation is not None and current_user.get_id() == reservation.user_email:
+        slot = Slot.query.filter_by(id=reservation.slot_id).first()
+        db.session.delete(reservation)
+        setattr(slot, 'available_seats', slot.available_seats+1)
         db.session.commit()
         return redirect(url_for('users.dashboard'))
     else:

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, SubmitField, IntegerField, FileField, DateField, TimeField
-from wtforms.validators import Length, DataRequired, ValidationError
+from wtforms.validators import Length, DataRequired, ValidationError, Optional
 
 from app.models import StudyRoom
 
@@ -66,10 +66,10 @@ class UploadPhotoForm(FlaskForm):
 
 class SlotAvailabilityForm(FlaskForm):
     # TODO we need to use correct timefield and think how to manage the times
-    open_morning = StringField('Open Morning', validators=[DataRequired(message='Insert the hour the study room will be opened in the morning')])
-    close_morning = StringField('Close Morning', validators=[DataRequired(message='Insert the hour the study room will be closed for lunch')])
-    open_evening = StringField('Open evening', validators=[DataRequired(message='Insert the hour the study room will be opened after lunch')])
-    close_evening = StringField('Close evening', validators=[DataRequired(message='Insert the hour the study room will be closed in the evenings')])
+    open_morning = TimeField('Open Morning', format='%H:%M', validators=[DataRequired(message='Insert the hour the study room will be opened in the morning (using HH:MM format)')])
+    close_morning = TimeField('Close Morning', format='%H:%M', validators=[DataRequired(message='Insert the hour the study room will be closed for lunch (using HH:MM format)')])
+    open_evening = TimeField('Open evening', format='%H:%M', validators=[DataRequired(message='Insert the hour the study room will be opened after lunch (using HH:MM format)')])
+    close_evening = TimeField('Close evening', format='%H:%M', validators=[DataRequired(message='Insert the hour the study room will be closed in the evenings (using HH:MM format)')])
 
     monday = BooleanField('Monday')
     tuesday = BooleanField('Tuesday')
@@ -85,7 +85,7 @@ class SearchStudyRoomForm(FlaskForm):
     city = StringField('City')
     postal_code = StringField('Postal Code')
     name = StringField('Name')
-    date = StringField('Date')
+    date = DateField('Date', format='%Y-%m-%d', validators=[Optional()])
     toilette = BooleanField('Toilettes')
     vending_machines = BooleanField('Vending Machines')
     wi_fi = BooleanField('Wi-Fi')
