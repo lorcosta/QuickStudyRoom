@@ -1,0 +1,50 @@
+{% extends 'dashboard_template.html' %}
+
+{% block dashboard_content %}
+                    <div class="container-fluid">
+                        <h1 class="mt-4"> View Reservations for {{ studyroom.name }}</h1>
+                        {% with messages = get_flashed_messages(category_filter=['error']) %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ message }}
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                        <div class="col-xl-12">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-calendar-check"></i>
+                                    Availability
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>{{ studyroom.open_morning.strftime('%H:%M') }}-{{ studyroom.close_morning.strftime('%H:%M') }}</th>
+                                                    <th>Morning seats booked</th>
+                                                    <th>{{ studyroom.open_evening.strftime('%H:%M') }}-{{ studyroom.close_evening.strftime('%H:%M') }}</th>
+                                                    <th>Evening seats booked</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for i in range(0,slots|length,2) %}
+                                                <tr>
+                                                    <td>{{ slots[i].date }}</td>
+                                                    <td>Available seats: {{ slots[i].available_seats }}</td>
+                                                    <td>{{studyroom.seats-slots[i].available_seats}}</td>
+                                                    <td>Available seats: {{ slots[i+1].available_seats }}</td>
+                                                    <td>{{studyroom.seats-slots[i+1].available_seats}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+{% endblock dashboard_content %}

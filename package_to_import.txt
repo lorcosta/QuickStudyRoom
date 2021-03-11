@@ -9,3 +9,12 @@ flask-wtf
 email-validator
 bcrypt
 flask-reuploaded
+
+Sistemazione home page
+Visualizzazione disponibilità rimanenti studyroom owner
+disabilitare delete reservation in orario non consono
+Inter compatibilità tra sistemi
+Prenotazione in due studyroom diverse ma nello stesso istante di tempo
+Eliminazione studyroom
+Blocco prenotazioni di una studyroom
+Cambio giorni e orario

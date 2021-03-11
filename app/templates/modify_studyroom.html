@@ -3,6 +3,11 @@
 {% block dashboard_content %}
                     <div class="container-fluid">
                         <h1 class="mt-4"> Modify {{ studyroom.name }}</h1>
+                        {% if not studyroom.bookable: %}
+                            <div class="alert alert-warning">
+                                Your Study Room is not available. Check down below to allow reservations!
+                             </div>
+                        {% endif %}
                             <div class="col-xl-12">
                                 <div class="card mb-4">
                                     <div class="card-header">

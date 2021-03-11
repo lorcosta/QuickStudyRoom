@@ -25,18 +25,19 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for reservation, list in informations.items(): %}
+                                            {% for reservation in ordered_reservations: %}
                                                 <tr>
-                                                    <td><a href="{{url_for('studyrooms.view_availability', id=list[1].id )}}">{{ list[1].name }}</a></td>
-                                                    <td>{{ list[1].city }}, {{ list[1].address }}</td>
-                                                    <td>{{ list[0].date }}</td>
-                                                    {% if list[0].morning: %}
-                                                        <td>{{ list[1].open_morning.strftime('%H:%M') }}-{{ list[1].close_morning.strftime('%H:%M') }}</td>
+                                                    <!-- problema al ciclo for, controllare accesso alle variabili del dizionario UndefinedError: dict object has no element <Reservation 9>-->
+                                                    <td><a href="{{url_for('studyrooms.view_availability', id=informations[reservation][1].id )}}">{{ informations[reservation][1].name }}</a></td>
+                                                    <td>{{ informations[reservation][1].city }}, {{ informations[reservation][1].address }}</td>
+                                                    <td>{{ informations[reservation][0].date }}</td>
+                                                    {% if informations[reservation][0].morning: %}
+                                                        <td>{{ informations[reservation][1].open_morning.strftime('%H:%M') }}-{{ informations[reservation][1].close_morning.strftime('%H:%M') }}</td>
                                                     {% else: %}
-                                                        <td>{{ list[1].open_evening.strftime('%H:%M') }}-{{ list[1].close_evening.strftime('%H:%M') }}</td>
+                                                        <td>{{ informations[reservation][1].open_evening.strftime('%H:%M') }}-{{ informations[reservation][1].close_evening.strftime('%H:%M') }}</td>
                                                     {% endif %}
-                                                    <td>{{ list[1].phone_num}}, {{ list[1].mail_contact }}</td>
-                                                    <td><a href="{{ url_for('studyrooms.delete_reservation', reservation_id=reservation.id , slot_id=list[0].id ) }}" class="btn btn-primary">Delete Reservation</a></td>
+                                                    <td>{{ informations[reservation][1].phone_num}}, {{ informations[reservation][1].mail_contact }}</td>
+                                                    <td><a href="{{ url_for('studyrooms.delete_reservation', reservation_id=reservation.id , slot_id=informations[reservation][0].id ) }}" class="btn btn-primary">Delete Reservation</a></td>
                                                 </tr>
                                             {% endfor %}
                                         </tbody>

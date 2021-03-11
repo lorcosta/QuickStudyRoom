@@ -21,7 +21,8 @@
                                                 <th>Address</th>
                                                 <th>Total Seats</th>
                                                 <th>Contacts</th>
-                                                <th>Modify</th>
+                                                <th>Manage</th>
+                                                <th>Reservations</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -33,6 +34,7 @@
                                                 <td>{{ studyroom.seats }}</td>
                                                 <td>{{ studyroom.mail_contact }}, {{studyroom.phone_num}}</td>
                                                 <td><a href="{{ url_for('studyrooms.modify_studyroom', id=studyroom.id) }}" class="btn btn-primary">Manage</a></td>
+                                                <td><a href="{{ url_for('studyrooms.view_reservations', studyroom_id=studyroom.id) }}" class="btn btn-primary">Reservations</a></td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>

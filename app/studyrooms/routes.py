@@ -38,7 +38,8 @@ def add_studyroom():
                                   seats=addStudyroomForm.seats.data)
             db.session.add(studyroom)
             db.session.commit()
-            return redirect(url_for('users.dashboard'))
+
+            return redirect(url_for('studyrooms.modify_studyroom', id=studyroom.id))
         return render_template('add_studyroom.html', title='Add a Study Room', form=addStudyroomForm)
     else:
         return flask.abort(401)
@@ -80,11 +81,6 @@ def modify_studyroom(id):
                                     others=modifyStudyroomForm.others.data)
         db.session.commit()
     if slotAvailabilityForm.submit.data and slotAvailabilityForm.validate_on_submit() and not studyroom.bookable:
-        # TODO remove the last condition and define the right procedure to block rerservations
-        '''update_day_and_hours(slotAvailabilityForm.monday.data, slotAvailabilityForm.monday.data, slotAvailabilityForm.monday.data,
-                             slotAvailabilityForm.monday.data, slotAvailabilityForm.monday.data, slotAvailabilityForm.monday.data,
-                             slotAvailabilityForm.monday.data, slotAvailabilityForm.open_morning.data, slotAvailabilityForm.close_morning.data,
-                             slotAvailabilityForm.open_evening.data, slotAvailabilityForm.close_evening.data)'''
         update_day_and_hours(studyroom=studyroom, form=slotAvailabilityForm)
         allow_reservation(studyroom)
         db.session.commit()
@@ -125,10 +121,14 @@ def book_studyroom(slot_id):
     slot = get_slot(slot_id)
     existing_reservation = Reservation.query.filter_by(user_email=current_user.get_id(), slot_id=slot_id).first()
     if slot.morning:
-        close = StudyRoom.query.filter_by(id=slot.studyroom_id).first().close_morning
+        time = StudyRoom.query.filter_by(id=slot.studyroom_id).first().close_morning
+        close = datetime(year=slot.date.year, month=slot.date.month, day=slot.date.day,
+                         hour=time.hour, minute=time.minute)
     else:
-        close = StudyRoom.query.filter_by(id=slot.studyroom_id).first().close_evening
-    if slot.available_seats > 0 and existing_reservation is None and datetime.utcnow().time() < close:
+        time = StudyRoom.query.filter_by(id=slot.studyroom_id).first().close_evening
+        close = datetime(year=slot.date.year, month=slot.date.month, day=slot.date.day,
+                         hour=time.hour, minute=time.minute)
+    if slot.available_seats > 0 and existing_reservation is None and datetime.utcnow() < close:
         reservation = Reservation(user_email=current_user.get_id(), slot_id=slot_id)
         setattr(slot, 'available_seats', slot.available_seats-1)
         db.session.add(reservation)
@@ -151,3 +151,11 @@ def delete_reservation(reservation_id):
         return redirect(url_for('users.dashboard'))
     else:
         flask.abort(401)
+
+
+@studyrooms.route('/view_reservations/<studyroom_id>')
+@login_required
+def view_reservations(studyroom_id):
+    studyroom = get_studyroom(studyroom_id)
+    slots = available_slots(studyroom)
+    return render_template('view_reservations.html', title='View Reservations', slots=slots, studyroom=studyroom)
