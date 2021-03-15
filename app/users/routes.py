@@ -36,7 +36,10 @@ def dashboard():
                 if datetime.utcnow() < close:
                     studyroom = StudyRoom.query.filter_by(id=slot.studyroom_id).first()
                     informations.update({reservation: [slot, studyroom]})
+
                     ordered_reservations = sort_by_date(informations)
+                    print ordered_reservations
+                    print informations.keys()
         return render_template('dashboard_user.html', title='Welcome to your profile', informations=informations, ordered_reservations=ordered_reservations)
     else:
         studyrooms = StudyRoom.query.filter_by(owner_id_email=current_user.get_id()).all()
