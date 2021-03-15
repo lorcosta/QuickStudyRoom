@@ -13,6 +13,24 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
+                                    <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-6">
+                                                <div class="dataTables_length" id="dataTable_length">
+                                                    <label>
+                                                        Show
+                                                        <select name="dataTable_length" aria-controls="dataTable"
+                                                                class="custom-select custom-select-sm form-control form-control-sm">
+                                                            <option value="2">2</option>
+                                                            <option value="5">5</option>
+                                                            <option value="10">10</option>
+                                                        </select>
+                                                    </label>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
@@ -34,7 +52,11 @@
                                                 <td>{{ studyroom.seats }}</td>
                                                 <td>{{ studyroom.mail_contact }}, {{studyroom.phone_num}}</td>
                                                 <td><a href="{{ url_for('studyrooms.modify_studyroom', id=studyroom.id) }}" class="btn btn-primary">Manage</a></td>
-                                                <td><a href="{{ url_for('studyrooms.view_reservations', studyroom_id=studyroom.id) }}" class="btn btn-primary">Reservations</a></td>
+                                                {% if studyroom.bookable: %}
+                                                    <td><a href="{{ url_for('studyrooms.view_reservations', studyroom_id=studyroom.id) }}" class="btn btn-primary">Reservations</a></td>
+                                                {% else: %}
+                                                    <td><a href="#" class="btn btn-primary">Not Available</a></td>
+                                                {% endif %}
                                             </tr>
                                             {% endfor %}
                                         </tbody>

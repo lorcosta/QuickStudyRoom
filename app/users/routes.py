@@ -4,16 +4,10 @@ from flask import render_template, flash
 from flask_login import login_required, current_user
 
 from app import db
-from app.auth.utilities import get_profile_from_db
 from app.models import User, StudyRoom, Reservation, Slot
 from app.users import users
 from app.users.forms import ModifyInformationForm, ModifyPasswordForm
 from app.users.utilities import update_information, update_password, sort_by_date
-
-
-class Studyroom(object):
-    pass
-
 
 @users.route('/dashboard')
 @login_required
@@ -22,6 +16,7 @@ def dashboard():
         reservations = Reservation.query.filter_by(user_email=current_user.get_id()).all()
         informations = {}
         slots = Slot.query
+        ordered_reservations = []
         for reservation in reservations:
             slot = slots.filter(Slot.id == reservation.slot_id, Slot.date >= datetime.utcnow().date()).first()
             if slot is not None:
@@ -39,7 +34,7 @@ def dashboard():
 
                     ordered_reservations = sort_by_date(informations)
                     print ordered_reservations
-                    print informations.keys()
+        print informations.keys()
         return render_template('dashboard_user.html', title='Welcome to your profile', informations=informations, ordered_reservations=ordered_reservations)
     else:
         studyrooms = StudyRoom.query.filter_by(owner_id_email=current_user.get_id()).all()

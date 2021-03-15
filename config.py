@@ -33,7 +33,7 @@ class DevConfig(Config):
 class ProdConfig(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = getenv('SQLALCHEMY_DATABASE_URI')
-
+    UPLOADED_PHOTOS_DEST = os.getcwd()
 
 config = {
     'development': DevConfig,

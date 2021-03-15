@@ -119,7 +119,13 @@ def view_availability(id):
 @login_required
 def book_studyroom(slot_id):
     slot = get_slot(slot_id)
-    existing_reservation = Reservation.query.filter_by(user_email=current_user.get_id(), slot_id=slot_id).first()
+    existing_reservation = False
+    reservations = Reservation.query.filter_by(user_email=current_user.get_id()).all()
+    for reservation in reservations:
+        reservation_slot = get_slot(reservation.slot_id)
+        if reservation_slot.date == slot.date and reservation_slot.morning == slot.morning:
+            existing_reservation = True
+            break
     if slot.morning:
         time = StudyRoom.query.filter_by(id=slot.studyroom_id).first().close_morning
         close = datetime(year=slot.date.year, month=slot.date.month, day=slot.date.day,
@@ -128,7 +134,7 @@ def book_studyroom(slot_id):
         time = StudyRoom.query.filter_by(id=slot.studyroom_id).first().close_evening
         close = datetime(year=slot.date.year, month=slot.date.month, day=slot.date.day,
                          hour=time.hour, minute=time.minute)
-    if slot.available_seats > 0 and existing_reservation is None and datetime.utcnow() < close:
+    if slot.available_seats > 0 and not existing_reservation and datetime.utcnow() < close:
         reservation = Reservation(user_email=current_user.get_id(), slot_id=slot_id)
         setattr(slot, 'available_seats', slot.available_seats-1)
         db.session.add(reservation)
