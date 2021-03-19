@@ -10,10 +10,11 @@ email-validator
 bcrypt
 flask-reuploaded
 
-Sistemazione home page
 Inter compatibilità tra sistemi
 Eliminazione studyroom
 Blocco prenotazioni di una studyroom
 Cambio giorni e orario per la studyroom da parte dell'owner
 comandi per creazione database?
 ricontrollare setup development application
+controllare price cancellando file db
+

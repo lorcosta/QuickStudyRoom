@@ -44,6 +44,8 @@ def update_day_and_hours(studyroom, form):
     setattr(studyroom, 'open_evening', form.open_evening.data)
     setattr(studyroom, 'close_evening', form.close_evening.data)
 
+    setattr(studyroom, 'price', form.price.data)
+
 
 def allow_reservation(studyroom):
     if not studyroom.bookable:

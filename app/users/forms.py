@@ -28,6 +28,7 @@ class ModifyPasswordForm(FlaskForm):
         if not verify_psw(email=current_user.get_id(), psw=oldPassword.data):
             raise ValidationError('The old password is wrong!')
 
+
 class CreateStudyRoomForm(FlaskForm):
     name = StringField('Study Room Name',
                        validators=[DataRequired(message='You need to insert the name of the study room')],

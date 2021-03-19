@@ -83,6 +83,7 @@ class StudyRoom(db.Model):
     city = db.Column(db.String, nullable=False)
     nation = db.Column(db.String, nullable=False)
     postal_code = db.Column(db.String, nullable=False)
+    price = db.Column(db.Float, default=0.00)
     bookable = db.Column(db.Boolean, nullable=False, default=False)  # fast check if a studyRoom is bookable
     toilette = db.Column(db.Boolean, nullable=False, default=False)
     vending_machines = db.Column(db.Boolean, nullable=False, default=False)
