@@ -81,6 +81,7 @@ def modify_studyroom(id):
                                     others=modifyStudyroomForm.others.data)
         db.session.commit()
     if slotAvailabilityForm.submit.data and slotAvailabilityForm.validate_on_submit() and not studyroom.bookable:
+        print ('form accepted')
         update_day_and_hours(studyroom=studyroom, form=slotAvailabilityForm)
         allow_reservation(studyroom)
         db.session.commit()

@@ -26,18 +26,10 @@ class DevConfig(Config):
     THREADED = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + path.join(basedir, 'DEV.db')
-    SQLALCHEMY_BINDS = getenv('SQLALCHEMY_BINDS')
-    UPLOADED_PHOTOS_DEST = os.getcwd()
-
-
-class ProdConfig(Config):
-    DEBUG = False
-    SQLALCHEMY_DATABASE_URI = getenv('SQLALCHEMY_DATABASE_URI')
     UPLOADED_PHOTOS_DEST = os.getcwd()
 
 config = {
-    'development': DevConfig,
-    'production': ProdConfig
+    'development': DevConfig
 }
 
 

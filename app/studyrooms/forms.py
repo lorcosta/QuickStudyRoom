@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, SubmitField, IntegerField, FileField, DateField, TimeField, FloatField, \
     DecimalField
@@ -71,7 +73,7 @@ class SlotAvailabilityForm(FlaskForm):
     close_morning = TimeField('Close Morning', format='%H:%M', validators=[DataRequired(message='Insert the hour the study room will be closed for lunch (using HH:MM format)')])
     open_evening = TimeField('Open evening', format='%H:%M', validators=[DataRequired(message='Insert the hour the study room will be opened after lunch (using HH:MM format)')])
     close_evening = TimeField('Close evening', format='%H:%M', validators=[DataRequired(message='Insert the hour the study room will be closed in the evenings (using HH:MM format)')])
-    price = DecimalField('Price per reservation', places=2, validators=[DataRequired(message='Insert the price to be paid for each reservation (using max 2 decimals)')])
+    price = DecimalField('Price per reservation', places=2, default=Decimal('0.00'))
     monday = BooleanField('Monday')
     tuesday = BooleanField('Tuesday')
     wednesday = BooleanField('Wednesday')
