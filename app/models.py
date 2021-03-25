@@ -18,15 +18,11 @@ class SuperUser(UserMixin):
     is_confirmed = db.Column(db.Boolean, nullable=False, default=False)
     name = db.Column(db.String(64), nullable=False)
     surname = db.Column(db.String(64), nullable=False)
-    # file_path = db.Column(db.String(20), unique=True)  # path to the directory where the files of the users are saved
-    dob = db.Column(db.DateTime, nullable=True)
-    city = db.Column(db.String)  # city and country
     password = db.Column(db.String(60), unique=False, nullable=False)
     confirmation_code = db.Column(db.Integer, nullable=True, unique=False)
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
-        # set file path, create a directory with the primary key
 
     def generate_confirmation_code(self):
         self.confirmation_code = randint(100000, 999999)
@@ -56,8 +52,6 @@ class Reservation(db.Model):
 
 class User(db.Model, SuperUser):
     __tablename__ = 'users'
-    cc_number = db.Column(db.String)
-    cc_exp = db.Column(db.DateTime)  # the day of expiration is always the last day of the month
     reservations = db.relationship('Reservation', foreign_keys=[Reservation.user_email], backref=db.backref('user'))
 
 
@@ -91,7 +85,7 @@ class StudyRoom(db.Model):
     electrical_outlets = db.Column(db.Boolean, nullable=False, default=False)
     printer = db.Column(db.Boolean, nullable=False, default=False)
     others = db.Column(db.String)
-    seats = db.Column(db.Integer, nullable=False)
+    seats = db.Column(db.Integer)
     open_morning = db.Column(db.Time, default=time(hour=8, minute=0))
     close_morning = db.Column(db.Time, default=time(hour=13, minute=0))
     open_evening = db.Column(db.Time, default=time(hour=14, minute=0))
@@ -104,15 +98,6 @@ class StudyRoom(db.Model):
     saturday = db.Column(db.Boolean, nullable=False, default=True)
     sunday = db.Column(db.Boolean, nullable=False, default=False)
     slots = db.relationship('Slot', foreign_keys=[Slot.studyroom_id], backref=db.backref('studyRoom'))
-    # TODO add photos??
-
-    def set_file_path(self):
-        if not self.id:
-            os.chdir(os.getcwd() + '/app/static')
-            if not os.path.exists(str(self.id)):
-                os.makedirs(str(self.id))
-    # def __repr__(self):
-        # return 'Study Room num. %r, %r. Owner contact: %r' % self.id, self.name, self.owner_id_email
 
 
 class Owner(db.Model, SuperUser):

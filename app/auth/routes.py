@@ -45,7 +45,6 @@ def sign_in():
                 signInForm.password.errors.append('Your profile is not yet verified! Check your email and follow instructions')
         else:
             signInForm.password.errors.append('Wrong password!')
-    # TODO set the remember me
     return render_template('signin.html', form=signInForm, title='Sign In')
 
 

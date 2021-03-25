@@ -1,10 +1,8 @@
 import click
-import os
 from flask.cli import with_appcontext
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
-from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, current_app
 from flask_uploads import UploadSet, IMAGES, configure_uploads, patch_request_class
@@ -12,7 +10,6 @@ from flask_uploads import UploadSet, IMAGES, configure_uploads, patch_request_cl
 from config import set_config
 
 db = SQLAlchemy()
-migration = Migrate()
 login_manager = LoginManager()
 pswManager = Bcrypt()
 mail = Mail()
@@ -37,9 +34,6 @@ def create_app(config=None):
         return None
     db.init_app(app)
     with app.app_context():
-        # TODO tests
-        # TODO migration
-        #migration.init_app(app, db)
         login_manager.init_app(app)
         login_manager.login_view = 'auth.sign_in'
         pswManager.init_app(app)
@@ -47,7 +41,7 @@ def create_app(config=None):
 
         configure_uploads(app, photos)
         patch_request_class(app, 16*1024*1024)
-        # TODO register blueprint
+
         from app.main import main
         app.register_blueprint(main)
 
@@ -62,6 +56,5 @@ def create_app(config=None):
 
         from app.studyrooms import studyrooms
         app.register_blueprint(studyrooms)
-        # TODO add command to do things on the database
-        app.cli.add_command(db_creation)
+
     return app

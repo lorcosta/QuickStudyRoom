@@ -31,15 +31,28 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        {{form.seats.label(class='small mb-1')}}
-                                                        {{form.seats(class='form-control py-4', value=studyroom.seats)}}
-                                                        {% for error in form.seats.errors %}
+                                                        {{form.phone_num.label(class='small mb-1')}}
+                                                        {{form.phone_num(class='form-control py-4', value=studyroom.phone_num)}}
+                                                        {% for error in form.phone_num.errors %}
                                                              <div class="alert alert-danger" role="alert">
                                                                 {{ error }}
                                                             </div>
                                                         {% endfor  %}
                                                     </div>
                                                 </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        {{form.mail_contact.label(class='small mb-1')}}
+                                                        {{form.mail_contact(class='form-control py-4', value=studyroom.mail_contact)}}
+                                                        {% for error in form.mail_contact.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         {{form.nation.label(class='small mb-1')}}
@@ -62,8 +75,6 @@
                                                         {% endfor  %}
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         {{form.address.label(class='small mb-1')}}
@@ -80,28 +91,6 @@
                                                         {{form.postal_code.label(class='small mb-1')}}
                                                         {{form.postal_code(class='form-control py-4', value=studyroom.postal_code)}}
                                                         {% for error in form.postal_code.errors %}
-                                                             <div class="alert alert-danger" role="alert">
-                                                                {{ error }}
-                                                            </div>
-                                                        {% endfor  %}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        {{form.phone_num.label(class='small mb-1')}}
-                                                        {{form.phone_num(class='form-control py-4', value=studyroom.phone_num)}}
-                                                        {% for error in form.phone_num.errors %}
-                                                             <div class="alert alert-danger" role="alert">
-                                                                {{ error }}
-                                                            </div>
-                                                        {% endfor  %}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        {{form.mail_contact.label(class='small mb-1')}}
-                                                        {{form.mail_contact(class='form-control py-4', value=studyroom.mail_contact)}}
-                                                        {% for error in form.mail_contact.errors %}
                                                              <div class="alert alert-danger" role="alert">
                                                                 {{ error }}
                                                             </div>
@@ -349,12 +338,24 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <label class="mb-1">Price: (€)</label>
+
                                             <div class="form-row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
+                                                        {{form_slot.price.label(class='small mb-1')}}
                                                         {{form_slot.price(class='form-control py-4', value=studyroom.price)}}
                                                         {% for error in form_slot.price.errors %}
+                                                             <div class="alert alert-danger" role="alert">
+                                                                {{ error }}
+                                                            </div>
+                                                        {% endfor  %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {{form_slot.seats.label(class='small mb-1')}}
+                                                        {{form_slot.seats(class='form-control py-4', value=studyroom.seats)}}
+                                                        {% for error in form_slot.seats.errors %}
                                                              <div class="alert alert-danger" role="alert">
                                                                 {{ error }}
                                                             </div>

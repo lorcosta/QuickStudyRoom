@@ -1,9 +1,9 @@
 from decimal import Decimal
 
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, validators
 from wtforms import StringField, BooleanField, SubmitField, IntegerField, FileField, DateField, TimeField, FloatField, \
     DecimalField
-from wtforms.validators import Length, DataRequired, ValidationError, Optional
+from wtforms.validators import Length, DataRequired, ValidationError, Optional, NumberRange, Email
 
 from app.models import StudyRoom
 
@@ -14,8 +14,7 @@ class AddStudyroomForm(FlaskForm):
     address = StringField('Address', validators=[Length(min=2, max=30), DataRequired(message='You need to insert the address')], render_kw={'placeholder': 'Address'})
     nation = StringField('Nation', validators=[Length(min=2, max=30), DataRequired(message='You need to insert the nation')], render_kw={'placeholder': 'Nation'})
     postal_code = StringField('Postal Code', validators=[DataRequired(message='You need to insert the postal code')], render_kw={'placeholder': 'Postal Code'})
-    seats = IntegerField('Number of Seats', validators=[DataRequired(message='You need to insert the number of seats of the study room')], render_kw={'placeholder': 'Number of seats'})
-    contact_mail = StringField('Mail Contact', validators=[Length(min=2, max=30), DataRequired(message='You need to insert the mail to contact you for this study room')], render_kw={'placeholder': 'Mail Contact'})
+    contact_mail = StringField('Mail Contact', validators=[Length(min=2, max=30), DataRequired(message='You need to insert the mail to contact you for this study room'), Email()], render_kw={'placeholder': 'Mail Contact'})
     contact_phoneNumber = StringField('Phone number Contact', validators=[Length(min=2, max=30), DataRequired(message='You need to insert the phone number to contact you for this study room')], render_kw={'placeholder': 'Phone number Contact'})
     toilette = BooleanField('Toilettes')
     vending_machines = BooleanField('Vending Machines')
@@ -26,7 +25,7 @@ class AddStudyroomForm(FlaskForm):
     submit = SubmitField('Create Study Room')
 
     def validate_name(self, name):
-        if StudyRoom.query.filter_by(name=name.data).first():
+        if StudyRoom.query.filter_by(name=name.data.upper()).first():
             raise ValidationError('This name has been already taken. Choose a different one.')
 
 
@@ -44,9 +43,6 @@ class ModifyStudyroomForm(FlaskForm):
                          render_kw={'placeholder': 'Nation'})
     postal_code = StringField('Postal Code', validators=[DataRequired(message='You need to insert the postal code')],
                               render_kw={'placeholder': 'Postal Code'})
-    seats = IntegerField('Number of Seats',
-                         validators=[DataRequired(message='You need to insert the number of seats of the study room')],
-                         render_kw={'placeholder': 'Number of seats'})
     mail_contact = StringField('Mail Contact', validators=[Length(min=2, max=30), DataRequired(
         message='You need to insert the mail to contact you for this study room')],
                                render_kw={'placeholder': 'Mail Contact'})
@@ -68,12 +64,13 @@ class UploadPhotoForm(FlaskForm):
 
 
 class SlotAvailabilityForm(FlaskForm):
-    # TODO we need to use correct timefield and think how to manage the times
     open_morning = TimeField('Open Morning', format='%H:%M', validators=[DataRequired(message='Insert the hour the study room will be opened in the morning (using HH:MM format)')])
     close_morning = TimeField('Close Morning', format='%H:%M', validators=[DataRequired(message='Insert the hour the study room will be closed for lunch (using HH:MM format)')])
     open_evening = TimeField('Open evening', format='%H:%M', validators=[DataRequired(message='Insert the hour the study room will be opened after lunch (using HH:MM format)')])
     close_evening = TimeField('Close evening', format='%H:%M', validators=[DataRequired(message='Insert the hour the study room will be closed in the evenings (using HH:MM format)')])
-    price = DecimalField('Price per reservation', places=2, default=Decimal('0.00'))
+    price = DecimalField('Price per reservation: (euro)', places=2, default=Decimal('0.00'), validators=[NumberRange(min=0.00)])
+    seats = IntegerField('Number of Seats', validators=[NumberRange(min=1), DataRequired(message='You need to insert the number of seats of the study room')],
+                         render_kw={'placeholder': 'Number of seats'})
     monday = BooleanField('Monday')
     tuesday = BooleanField('Tuesday')
     wednesday = BooleanField('Wednesday')
@@ -85,10 +82,10 @@ class SlotAvailabilityForm(FlaskForm):
 
 
 class SearchStudyRoomForm(FlaskForm):
-    city = StringField('City')
-    postal_code = StringField('Postal Code')
-    name = StringField('Name')
-    date = DateField('Date', format='%Y-%m-%d', validators=[Optional()])
+    city = StringField('City', render_kw={'placeholder': 'City'})
+    postal_code = StringField('Postal Code', render_kw={'placeholder': 'Postal code'})
+    name = StringField('Name', render_kw={'placeholder': 'Study Room Name'})
+    date = DateField('Date', format='%Y-%m-%d', validators=[Optional()], render_kw={'placeholder': 'YYYY-MM-DD'})
     toilette = BooleanField('Toilettes')
     vending_machines = BooleanField('Vending Machines')
     wi_fi = BooleanField('Wi-Fi')

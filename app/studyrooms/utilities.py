@@ -31,7 +31,7 @@ def update_StudyroomInformation(studyroom, name, city, address, nation, postal_c
     setattr(studyroom, 'others', others)
 
 
-def update_day_and_hours(studyroom, form):
+def update_day_hours_price_seats(studyroom, form):
     setattr(studyroom, 'monday', form.monday.data)
     setattr(studyroom, 'tuesday', form.tuesday.data)
     setattr(studyroom, 'wednesday', form.wednesday.data)
@@ -45,6 +45,7 @@ def update_day_and_hours(studyroom, form):
     setattr(studyroom, 'close_evening', form.close_evening.data)
 
     setattr(studyroom, 'price', form.price.data)
+    setattr(studyroom, 'seats', form.seats.data)
 
 
 def allow_reservation(studyroom):
@@ -63,15 +64,25 @@ def allow_reservation(studyroom):
         setattr(studyroom, 'bookable', False)
 
 
-def search_studyroom(city, postal_code, name, date):
+def search_studyroom(city, postal_code, name, date, toilette, wi_fi, vending_machines, printer, electrical_outlets):
     results = StudyRoom.query
-
+    results = results.filter(StudyRoom.bookable == 1)
     if len(city) is not 0:
         results = results.filter(StudyRoom.city == city)
     if len(postal_code) is not 0:
         results = results.filter(StudyRoom.postal_code == postal_code)
     if len(name) is not 0:
         results = results.filter(StudyRoom.name == name)
+    if toilette:
+        results = results.filter(StudyRoom.toilette == 1)
+    if wi_fi:
+        results = results.filter(StudyRoom.wi_fi == 1)
+    if printer:
+        results = results.filter(StudyRoom.printer == 1)
+    if electrical_outlets:
+        results = results.filter(StudyRoom.electrical_outlets == 1)
+    if vending_machines:
+        results = results.filter(StudyRoom.vending_machines == 1)
     if date is not None:
         studyrooms = results.all()
         results_date = []
