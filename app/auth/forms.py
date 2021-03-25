@@ -69,6 +69,10 @@ class ForgotPasswordForm(FlaskForm):
                         render_kw={'placeholder': 'Your email'})
     submit = SubmitField('Send password reset')
 
+    def validate_email(self, email):
+        if not User.query.filter_by(email=email.data).first() and not Owner.query.filter_by(email=email.data).first():
+            raise ValidationError('This email does not exist in the database. Insert the email used to sign up.')
+
     def password_reset(self, email):
         if User.query.filter_by(email=email).first() or Owner.query.filter_by(email=email).first():
             profile = User.query.filter_by(email=email).first() or Owner.query.filter_by(email=email).first()
