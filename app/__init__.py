@@ -18,13 +18,6 @@ login_manager.login_view = 'auth.login'
 photos = UploadSet('photos', IMAGES)
 
 
-@click.command(name='create_db', help='In theory it build the database')
-@with_appcontext
-def db_creation():
-    current_app.config.from_object(set_config())
-    db.create_all()
-
-
 def create_app(config=None):
     app = Flask(__name__)
     try:
