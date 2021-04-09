@@ -1,0 +1,50 @@
+Installation procedures:
+
+1) Open the folder “QuickStudyRoom-master” containing the project into PyCharm
+2) Add the .env file to the project
+3) Create the virtual environment:
+	If you are on a MacOs system select “PyCharm”->“Preferences”->“Python Interpreter”-> and select Python 2.7 as interpreter
+	If you are on Windows select: “File”->“Settings”->“Project:QuickStudyRoom-master”->“Python Interpreter”-> and select Python 2.7 as interpreter
+4) Install the following package with the specified version:
+
+DateTime 4.3
+Flask 1.1.2
+Flask-Bcrypt 0.7.1
+Flask-Login 0.5.0
+Flask-Mail 0.9.1
+Flask-Reuploaded 0.3.2
+Flask-SQLAlchemy 2.5.1
+Flask-WTF 0.14.3
+Jinja2 2.11.3
+Mako 1.1.4
+MarkupSafe 1.1.1
+SQLAlchemy 1.4.2
+WTForms 2.3.3
+Werkzeug 1.0.1
+alembic 1.5.7
+bcrypt 3.1.7
+blinker 1.4
+cffi 1.14.5
+click 7.1.2
+configparser 4.0.2
+contextlib2 0.6.0.post1
+dnspython 1.16.0
+email-validator 1.1.2
+idna 2.10
+importlib-metadata 2.1.1
+itsdangerous 1.1.0
+pathlib2 2.3.5
+pip 20.3.4
+pycparser 2.20
+python-dateutil 2.8.1
+python-dotenv 0.15.0
+python-editor 1.0.4
+pytz 2021.1
+scandir 1.10.0
+setuptools 44.1.1
+six 1.15.0
+typing 3.7.4.3
+wheel 0.36.2
+wsgiref 0.1.2
+zipp 1.2.0
+zope.interface 5.3.0
